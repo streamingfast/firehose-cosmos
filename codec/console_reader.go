@@ -111,12 +111,12 @@ func FromProto(b interface{}) (*bstream.Block, error) {
 		PreviousId:     hex2string(header.LastBlockId.Hash),
 		Number:         uint64(header.Height),
 		LibNum:         uint64(header.Height - 1),
-		Timestamp:      parseTimestamp(header.Time),
+		Timestamp:      header.Time,
 		PayloadKind:    pbbstream.Protocol_TENDERMINT,
 		PayloadVersion: 1,
 	}
 
-	if header.Height == bstream.GetProtocolFirstStreamableBlock {
+	if uint64(header.Height) == bstream.GetProtocolFirstStreamableBlock {
 		block.LibNum = bstream.GetProtocolFirstStreamableBlock
 		block.PreviousId = ""
 	}

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/figment-networks/extractor-tendermint"
 	"github.com/figment-networks/tendermint-protobuf-def/codec"
@@ -77,9 +76,9 @@ func parseNumber(str string) (uint64, error) {
 	return strconv.ParseUint(str, 10, 64)
 }
 
-func parseTimestamp(ts *codec.Timestamp) time.Time {
-	return time.Unix(ts.Seconds, int64(ts.Nanos)).UTC()
-}
+// func parseTimestamp(ts *codec.Timestamp) time.Time {
+// 	return time.Unix(ts.Seconds, int64(ts.Nanos)).UTC()
+// }
 
 func parseFromProto(data string, message proto.Message) (proto.Message, error) {
 	buf, err := base64.StdEncoding.DecodeString(data)
