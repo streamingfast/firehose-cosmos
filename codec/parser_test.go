@@ -10,6 +10,7 @@ import (
 	"google.golang.org/protobuf/proto"
 
 	"github.com/figment-networks/tendermint-protobuf-def/codec"
+	tmtypes "github.com/tendermint/tendermint/proto/tendermint/types"
 )
 
 func TestParseLine(t *testing.T) {
@@ -18,10 +19,10 @@ func TestParseLine(t *testing.T) {
 	want := &ParsedLine{
 		Kind: "BLOCK",
 		Data: &codec.EventBlock{
-			Block: &codec.Block{
-				Header: &codec.Header{
+			Block: &tmtypes.Block{
+				Header: tmtypes.Header{
 					Height: 5201079,
-					Time:   &codec.Timestamp{Seconds: 1613653893},
+					Time:   time.Unix(642373925, 0),
 				},
 			},
 		},
@@ -68,10 +69,10 @@ func TestParseData(t *testing.T) {
 	input := "Cg8KDRjfuL0CIgYIpbKnsgI="
 
 	want := &codec.EventBlock{
-		Block: &codec.Block{
-			Header: &codec.Header{
+		Block: &tmtypes.Block{
+			Header: tmtypes.Header{
 				Height: 5200991,
-				Time:   &codec.Timestamp{Seconds: 642373925},
+				Time:   time.Unix(642373925, 0),
 			},
 		},
 	}
@@ -119,19 +120,19 @@ func TestParseNumber(t *testing.T) {
 
 func TestParseTimestamp(t *testing.T) {
 	examples := []struct {
-		input    *codec.Timestamp
+		input    time.Time
 		expected time.Time
 	}{
 		{
-			input: &codec.Timestamp{
-				Seconds: 1613653893,
-				Nanos:   2137,
-			},
-			expected: time.Date(2021, 2, 18, 13, 11, 33, 2137, time.UTC),
+			input: time.Unix(
+				1613653893,
+				2137,
+			),
+			expected: time.Date(2021, 2, 18, 13, 11, 33, 2137, time.Local),
 		},
 	}
 
 	for _, example := range examples {
-		assert.Equal(t, example.expected, parseTimestamp(example.input))
+		assert.Equal(t, example.expected, example.input)
 	}
 }
