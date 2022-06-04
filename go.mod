@@ -29,7 +29,7 @@ require (
 	github.com/streamingfast/bstream v0.0.2-0.20220505155906-a0834b9c5258
 	github.com/streamingfast/dbin v0.0.0-20210809205249-73d5eca35dc5
 	github.com/streamingfast/dgrpc v0.0.0-20220301153539-536adf71b594
-	github.com/streamingfast/firehose v0.1.1-0.20220427051727-9b108461d3a6
+	github.com/streamingfast/firehose v0.1.1-0.20220601134123-59f857d9b75e
 	github.com/streamingfast/merger v0.0.3-0.20220307182136-ea57e6c34740
 	github.com/streamingfast/node-manager v0.0.2-0.20220111134042-8a0db96986a1
 	github.com/streamingfast/pbgo v0.0.6-0.20220428192744-f80aee7d4688
