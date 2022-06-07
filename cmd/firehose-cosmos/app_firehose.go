@@ -53,7 +53,7 @@ func init() {
 		//substreams
 		cmd.Flags().Bool("substreams-enabled", false, "Whether to enable substreams")
 		cmd.Flags().Bool("substreams-partial-mode-enabled", false, "Whether to enable partial stores generation support on this instance (usually for internal deployments only)")
-		cmd.Flags().String("substreams-state-store-url", "{sf-data-dir}/localdata", "where substreams state data are stored")
+		cmd.Flags().String("substreams-state-store-url", "{fh-data-dir}/localdata", "where substreams state data are stored")
 		cmd.Flags().Uint64("substreams-stores-save-interval", uint64(1_000), "Interval in blocks at which to save store snapshots")     // fixme
 		cmd.Flags().Uint64("substreams-output-cache-save-interval", uint64(100), "Interval in blocks at which to save store snapshots") // fixme
 		cmd.Flags().Uint64("substreams-rpc-cache-chunk-size", uint64(1_000), "RPC cache chunk size in block")
