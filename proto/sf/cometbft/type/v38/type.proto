@@ -1,0 +1,203 @@
+syntax = "proto3";
+package sf.cometbft.type.v38.Block;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/streamingfast/firehose-cosmos/pb";
+
+// All the abci event data of a block that will store as Firehose block
+message Block {
+  BlockMeta meta = 1;
+  // set of block events emmitted as part of executing the block
+  repeated Event events = 2
+  [(gogoproto.nullable) = false, (gogoproto.jsontag) = "events,omitempty"];
+  // the result of executing each transaction including the events
+  // the particular transction emitted. This should match the order
+  // of the transactions delivered in the block itself
+  repeated ExecTxResult tx_results = 3;
+  // a list of updates to the validator set. These will reflect the validator set at current height + 2.
+  repeated ValidatorUpdate validator_updates = 4 [(gogoproto.nullable) = false];
+  // updates to the consensus params, if any.
+  ConsensusParams consensus_param_updates = 5;
+  // app_hash is the hash of the applications' state which is used to confirm that execution of the transactions was deterministic. It is up to the application to decide which algorithm to use.
+  bytes app_hash = 6;
+}
+
+message Event {
+  string                  type       = 1;
+  repeated EventAttribute attributes = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag)  = "attributes,omitempty"
+  ];
+}
+
+// EventAttribute is a single key-value pair, associated with an event.
+message EventAttribute {
+  string key   = 1;
+  string value = 2;
+  bool   index = 3;  // nondeterministic
+}
+
+message ValidatorUpdate {
+  PublicKey pub_key = 1 [(gogoproto.nullable) = false];
+  int64                       power   = 2;
+}
+
+message PublicKey {
+  option (gogoproto.compare) = true;
+  option (gogoproto.equal)   = true;
+
+  oneof sum {
+    bytes ed25519   = 1;
+    bytes secp256k1 = 2;
+  }
+}
+
+
+
+// ExecTxResult contains results of executing one individual transaction.
+//
+// * Its structure is equivalent to #ResponseDeliverTx which will be deprecated/deleted
+message ExecTxResult {
+  uint32         code       = 1;
+  bytes          data       = 2;
+  string         log        = 3;  // nondeterministic
+  string         info       = 4;  // nondeterministic
+  int64          gas_wanted = 5 [json_name = "gas_wanted"];
+  int64          gas_used   = 6 [json_name = "gas_used"];
+  repeated Event events     = 7
+  [(gogoproto.nullable) = false, (gogoproto.jsontag) = "events,omitempty"];  // nondeterministic
+  string codespace = 8;
+}
+
+// ConsensusParams contains consensus critical parameters that determine the
+// validity of blocks.
+message ConsensusParams {
+  BlockParams     block     = 1;
+  EvidenceParams  evidence  = 2;
+  ValidatorParams validator = 3;
+  VersionParams   version   = 4;
+  ABCIParams      abci      = 5;
+}
+
+// BlockParams contains limits on the block size.
+message BlockParams {
+  // Max block size, in bytes.
+  // Note: must be greater than 0
+  int64 max_bytes = 1;
+  // Max gas per block.
+  // Note: must be greater or equal to -1
+  int64 max_gas = 2;
+
+  reserved 3;  // was TimeIotaMs see https://github.com/tendermint/tendermint/pull/5792
+}
+
+// EvidenceParams determine how we handle evidence of malfeasance.
+message EvidenceParams {
+  // Max age of evidence, in blocks.
+  //
+  // The basic formula for calculating this is: MaxAgeDuration / {average block
+  // time}.
+  int64 max_age_num_blocks = 1;
+
+  // Max age of evidence, in time.
+  //
+  // It should correspond with an app's "unbonding period" or other similar
+  // mechanism for handling [Nothing-At-Stake
+  // attacks](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ#what-is-the-nothing-at-stake-problem-and-how-can-it-be-fixed).
+  google.protobuf.Duration max_age_duration = 2
+  [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+
+  // This sets the maximum size of total evidence in bytes that can be committed in a single block.
+  // and should fall comfortably under the max block bytes.
+  // Default is 1048576 or 1MB
+  int64 max_bytes = 3;
+}
+
+// ValidatorParams restrict the public key types validators can use.
+// NOTE: uses ABCI pubkey naming, not Amino names.
+message ValidatorParams {
+  option (gogoproto.populate) = true;
+  option (gogoproto.equal)    = true;
+
+  repeated string pub_key_types = 1;
+}
+
+// VersionParams contains the ABCI application version.
+message VersionParams {
+  option (gogoproto.populate) = true;
+  option (gogoproto.equal)    = true;
+
+  uint64 app = 1;
+}
+
+// ABCIParams configure functionality specific to the Application Blockchain Interface.
+message ABCIParams {
+  // vote_extensions_enable_height configures the first height during which
+  // vote extensions will be enabled. During this specified height, and for all
+  // subsequent heights, precommit messages that do not contain valid extension data
+  // will be considered invalid. Prior to this height, vote extensions will not
+  // be used or accepted by validators on the network.
+  //
+  // Once enabled, vote extensions will be created by the application in ExtendVote,
+  // passed to the application for validation in VerifyVoteExtension and given
+  // to the application to use when proposing a block during PrepareProposal.
+  int64 vote_extensions_enable_height = 1;
+}
+
+message BlockMeta {
+  BlockID block_id   = 1 [(gogoproto.customname) = "BlockID", (gogoproto.nullable) = false];
+  int64   block_size = 2;
+  Header  header     = 3 [(gogoproto.nullable) = false];
+  int64   num_txs    = 4;
+}
+
+message Header {
+  // basic block info
+  Consensus version  = 1 [(gogoproto.nullable) = false];
+  string                       chain_id = 2 [(gogoproto.customname) = "ChainID"];
+  int64                        height   = 3;
+  google.protobuf.Timestamp    time     = 4 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+
+  // prev block info
+  BlockID last_block_id = 5 [(gogoproto.nullable) = false];
+
+  // hashes of block data
+  bytes last_commit_hash = 6;  // commit from validators from the last block
+  bytes data_hash        = 7;  // transactions
+
+  // hashes from the app output from the prev block
+  bytes validators_hash      = 8;   // validators for the current block
+  bytes next_validators_hash = 9;   // validators for the next block
+  bytes consensus_hash       = 10;  // consensus params for current block
+  bytes app_hash             = 11;  // state after txs from the previous block
+  bytes last_results_hash    = 12;  // root hash of all results from the txs from the previous block
+
+  // consensus info
+  bytes evidence_hash    = 13;  // evidence included in the block
+  bytes proposer_address = 14;  // original proposer of the block
+}
+
+// Consensus captures the consensus rules for processing a block in the blockchain,
+// including all blockchain data structures and the rules of the application's
+// state transition machine.
+message Consensus {
+  option (gogoproto.equal) = true;
+
+  uint64 block = 1;
+  uint64 app   = 2;
+}
+
+// BlockID
+message BlockID {
+  bytes         hash            = 1;
+  PartSetHeader part_set_header = 2 [(gogoproto.nullable) = false];
+}
+
+// PartsetHeader
+message PartSetHeader {
+  uint32 total = 1;
+  bytes  hash  = 2;
+}
