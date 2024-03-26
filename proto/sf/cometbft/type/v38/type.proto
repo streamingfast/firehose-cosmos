@@ -1,5 +1,5 @@
 syntax = "proto3";
-package sf.cometbft.type.v38.Block;
+package sf.cometbft.type.v38;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
