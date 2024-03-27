@@ -1,5 +1,11 @@
 version: v1
 plugins:
-  - name: go
+  - name: gocosmos
     out: ../pb
-    opt: paths=source_relative
+    opt: 
+    - plugins=grpc
+    - Mgoogle/protobuf/any.proto=github.com/cosmos/cosmos-sdk/codec/types
+    - Mtendermint/abci/types.proto=github.com/cometbft/cometbft/abci/types
+    - Mtendermint/types/types.proto=github.com/cometbft/cometbft/proto/tendermint/types
+    - Mtendermint/types/validator.proto=github.com/cometbft/cometbft/proto/tendermint/types
+    - Mtendermint/types/params.proto=github.com/cometbft/cometbft/proto/tendermint/types

@@ -11,7 +11,7 @@ import (
 	"github.com/cometbft/cometbft/state"
 	txindexkv "github.com/cometbft/cometbft/state/txindex/kv"
 	"github.com/cometbft/cometbft/store"
-	"github.com/cosmos/cosmos-sdk/store/streaming/firehose"
+	pb "github.com/streamingfast/firehose-cosmos/pb/github.com/streamingfast/firehose-cosmos/pb"
 )
 
 func main() {
@@ -71,22 +71,21 @@ func Main() error {
 		}
 		blockResponse.TxResults = txResults
 
-		asBytes, err := blockResponse.Marshal()
-		if err != nil {
-			return fmt.Errorf("marshal block response: %w", err)
-		}
-		newFormatResponseBlock := &firehose.ResponseFinalizeBlock{}
-		err = newFormatResponseBlock.Unmarshal(asBytes)
-		if err != nil {
-			return fmt.Errorf("marshal block response: %w", err)
-		}
+		// asBytes, err := blockResponse.Marshal()
+		// if err != nil {
+		// 	return fmt.Errorf("marshal block response: %w", err)
+		// }
+		// newFormatResponseBlock := &firehose.ResponseFinalizeBlock{}
+		// err = newFormatResponseBlock.Unmarshal(asBytes)
+		// if err != nil {
+		// 	return fmt.Errorf("marshal block response: %w", err)
+		// }
 
 		//writeProto(blockResponse, fmt.Sprintf("%d_finalized_block.json", height))
 
-		bstreamBlock := &firehose.Block{
+		bstreamBlock := &pb.Block{
 			Header: blockMeta.Header.ToProto(),
-			Req:    &firehose.RequestFinalizeBlock{},
-			Res:    newFormatResponseBlock,
+			Res:    blockResponse,
 		}
 
 		writeProto(bstreamBlock, fmt.Sprintf("%b_stream.json", height))
