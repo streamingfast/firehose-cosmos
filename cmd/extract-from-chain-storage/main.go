@@ -48,13 +48,13 @@ func Main() error {
 	last := blockStore.Height()
 	fmt.Println(first, last)
 
-	for height := first; height <= last-1; height++ {
+	for height := first; height <= last-1 && height <= first+5; height++ {
+		var nilCount int
 		block := blockStore.LoadBlock(height)
-		fmt.Println("Writing", height, block.Header.Height)
 
-		writeProto(block, fmt.Sprintf("%d_block.json", height))
+		//writeProto(block, fmt.Sprintf("%d_block.json", height))
 		blockMeta := blockStore.LoadBlockMeta(height)
-		writeProto(blockMeta, fmt.Sprintf("%d_blockmeta.json", height))
+		//writeProto(blockMeta, fmt.Sprintf("%d_blockmeta.json", height))
 
 		blockResponse, err := stateStore.LoadFinalizeBlockResponse(height)
 		if err != nil {
@@ -67,28 +67,63 @@ func Main() error {
 			if err != nil {
 				return err
 			}
-			txResults = append(txResults, &res.Result)
+			if res == nil {
+				nilCount += 1
+				txResults = append(txResults, nil)
+				/// TODO: we should fail here, it's because the snapshot doesn't contain the transaction results
+				// of the block at which it is supposed to have the state.
+			} else {
+				txResults = append(txResults, &res.Result)
+			}
 		}
 		blockResponse.TxResults = txResults
 
-		// asBytes, err := blockResponse.Marshal()
-		// if err != nil {
-		// 	return fmt.Errorf("marshal block response: %w", err)
-		// }
-		// newFormatResponseBlock := &firehose.ResponseFinalizeBlock{}
-		// err = newFormatResponseBlock.Unmarshal(asBytes)
-		// if err != nil {
-		// 	return fmt.Errorf("marshal block response: %w", err)
-		// }
+		/*
+			req handles:
+			   type RequestFinalizeBlock struct {
+			   	Txs               [][]byte      `protobuf:"bytes,1,rep,name=txs,proto3" json:"txs,omitempty"`
+			   	DecidedLastCommit CommitInfo    `protobuf:"bytes,2,opt,name=decided_last_commit,json=decidedLastCommit,proto3" json:"decided_last_commit"`
+			   	Misbehavior       []Misbehavior `protobuf:"bytes,3,rep,name=misbehavior,proto3" json:"misbehavior"`
+			   	// hash is the merkle root hash of the fields of the decided block.
+			   	Hash               []byte    `protobuf:"bytes,4,opt,name=hash,proto3" json:"hash,omitempty"`
+			   	Height             int64     `protobuf:"varint,5,opt,name=height,proto3" json:"height,omitempty"`
+			   	Time               time.Time `protobuf:"bytes,6,opt,name=time,proto3,stdtime" json:"time"`
+			   	NextValidatorsHash []byte    `protobuf:"bytes,7,opt,name=next_validators_hash,json=nextValidatorsHash,proto3" json:"next_validators_hash,omitempty"`
+			   	// proposer_address is the address of the public key of the original proposer of the block.
+			   	ProposerAddress []byte `protobuf:"bytes,8,opt,name=proposer_address,json=proposerAddress,proto3" json:"proposer_address,omitempty"`
+			   }
+			BlockMeta holds:
+			   	BlockID   BlockID `json:"block_id"`
+			   	BlockSize int     `json:"block_size"`
+			   	Header    Header  `json:"header"`
+			   	NumTxs    int     `json:"num_txs"`
+			Block holds:
+			   	Header     `json:"header"`
+				Data       `json:"data"`
+				    which contains:
+			   			Txs Txs `json:"txs"`
+				Evidence   EvidenceData `json:"evidence"`
+				LastCommit *Commit      `json:"last_commit"`
+			Commit holds:
+				Height     int64       `json:"height"`
+				Round      int32       `json:"round"`
+				BlockID    BlockID     `json:"block_id"`
+				Signatures []CommitSig `json:"signatures"`
+			EvidenceData contains, deep inside a bunch of `abci.Misbehavior`
 
-		//writeProto(blockResponse, fmt.Sprintf("%d_finalized_block.json", height))
+		*/
+		req := &abci.RequestFinalizeBlock{}
 
 		bstreamBlock := &pb.Block{
 			Header: blockMeta.Header.ToProto(),
-			Res:    blockResponse,
+			// TODO: HEY ADD Req!!!
+			Req: req,
+			Res: blockResponse,
 		}
 
-		writeProto(bstreamBlock, fmt.Sprintf("%b_stream.json", height))
+		fmt.Println("Writing", height, nilCount)
+
+		writeProto(bstreamBlock, fmt.Sprintf("%d_stream.json", height))
 	}
 
 	return nil
