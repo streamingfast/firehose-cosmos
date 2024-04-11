@@ -1,0 +1,200 @@
+syntax = "proto3";
+package sf.cosmos.type.v2;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/streamingfast/firehose-injective/pb/sf/injective/type/v1;pbinj";
+
+// Firehose-centric Block
+message Block {
+  bytes hash = 1;
+  int64 height = 2;
+
+  google.protobuf.Timestamp time = 3;
+
+  Header header = 4;
+
+  repeated Misbehavior misbehavior = 6;
+
+  repeated Event events = 7;
+
+  repeated bytes txs = 8;
+  repeated TxResults tx_results = 9;
+
+  repeated ValidatorUpdate validator_updates = 10;
+
+  ConsensusParams consensus_param_updates = 11;
+
+  // validators for the next block
+  // bytes next_validators_hash = 12;
+  reserved 12; //part of the header
+
+  // proposer_address is the address of the public key of the original proposer of the block.
+  //  bytes proposer_address = 13;
+  reserved 13; //part of the header
+
+  reserved 14; //repeated StoreKVPair changeSet = 4;
+}
+
+// Header defines the structure of a block header.
+message Header {
+  // basic block info
+  Consensus version = 1;
+  string chain_id = 2 ;
+  int64 height = 3;
+  google.protobuf.Timestamp    time = 4;
+
+  // prev block info
+  BlockID last_block_id = 5 ;
+
+  // hashes of block data
+  bytes last_commit_hash = 6;  // commit from validators from the last block
+  bytes data_hash = 7;  // transactions
+
+  // hashes from the app output from the prev block
+  bytes validators_hash = 8;   // validators for the current block
+  bytes next_validators_hash = 9;   // validators for the next block
+  bytes consensus_hash = 10;  // consensus params for current block
+  bytes app_hash = 11;  // state after txs from the previous block
+  bytes last_results_hash = 12;  // root hash of all results from the txs from the previous block
+
+  // consensus info
+  bytes evidence_hash = 13;  // evidence included in the block
+  bytes proposer_address = 14;  // original proposer of the block
+}
+
+message Consensus {
+  uint64 block = 1;
+  uint64 app = 2;
+}
+
+message BlockID {
+  bytes hash = 1;
+  PartSetHeader part_set_header = 2;
+}
+
+message PartSetHeader {
+  uint32 total = 1;
+  bytes  hash = 2;
+}
+
+message Misbehavior {
+  MisbehaviorType type = 1;
+  // The offending validator
+  Validator validator = 2;
+  // The height when the offense occurred
+  int64 height = 3;
+  // The corresponding time where the offense occurred
+  google.protobuf.Timestamp time = 4;
+
+  // Total voting power of the validator set in case the ABCI application does
+  // not store historical validators.
+  // https://github.com/tendermint/tendermint/issues/4581
+  int64 total_voting_power = 5;
+}
+
+enum MisbehaviorType {
+  UNKNOWN = 0;
+  DUPLICATE_VOTE = 1;
+  LIGHT_CLIENT_ATTACK = 2;
+}
+
+message Validator {
+  bytes address = 1;  // The first 20 bytes of SHA256(public key)
+  int64 power = 3;  // The voting power
+}
+
+message Event {
+  string                  type = 1;
+  repeated EventAttribute attributes = 2;
+}
+
+message EventAttribute {
+  string key = 1;
+  string value = 2;
+  //  bool   index = 3;  // nondeterministic
+}
+
+message TxResults {
+  uint32 code = 1;
+  bytes data = 2;
+  string log = 3;  // nondeterministic
+  string info = 4;  // nondeterministic
+  int64 gas_wanted = 5;
+  int64 gas_used = 6;
+  repeated Event events = 7;  // nondeterministic
+  string codespace = 8;
+}
+
+// ValidatorUpdate
+message ValidatorUpdate {
+  PublicKey pub_key = 1;
+  int64 power = 2;
+}
+
+message PublicKey {
+  oneof sum {
+    bytes ed25519 = 1;
+    bytes secp256k1 = 2;
+  }
+}
+
+message ConsensusParams {
+  BlockParams     block     = 1;
+  EvidenceParams  evidence  = 2;
+  ValidatorParams validator = 3;
+  VersionParams   version   = 4;
+}
+
+// BlockParams contains limits on the block size.
+message BlockParams {
+  // Max block size, in bytes.
+  // Note: must be greater than 0
+  int64 max_bytes = 1;
+  // Max gas per block.
+  // Note: must be greater or equal to -1
+  int64 max_gas = 2;
+
+  reserved 3;  // was TimeIotaMs see https://github.com/cometbft/cometbft/pull/5792
+}
+
+// EvidenceParams determine how we handle evidence of malfeasance.
+message EvidenceParams {
+  // Max age of evidence, in blocks.
+  //
+  // The basic formula for calculating this is: MaxAgeDuration / {average block
+  // time}.
+  int64 max_age_num_blocks = 1;
+
+  // Max age of evidence, in time.
+  //
+  // It should correspond with an app's "unbonding period" or other similar
+  // mechanism for handling [Nothing-At-Stake
+  // attacks](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ#what-is-the-nothing-at-stake-problem-and-how-can-it-be-fixed).
+  google.protobuf.Duration max_age_duration = 2;
+
+  // This sets the maximum size of total evidence in bytes that can be committed in a single block.
+  // and should fall comfortably under the max block bytes.
+  // Default is 1048576 or 1MB
+  int64 max_bytes = 3;
+}
+
+// ValidatorParams restrict the public key types validators can use.
+// NOTE: uses ABCI pubkey naming, not Amino names.
+message ValidatorParams {
+  repeated string pub_key_types = 1;
+}
+
+// VersionParams contains the ABCI application version.
+message VersionParams {
+  uint64 app = 1;
+}
+
+// HashedParams is a subset of ConsensusParams.
+//
+// It is hashed into the Header.ConsensusHash.
+message HashedParams {
+  int64 block_max_bytes = 1;
+  int64 block_max_gas   = 2;
+}

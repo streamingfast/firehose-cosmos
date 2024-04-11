@@ -25,7 +25,8 @@ func Main() error {
 	logging.InstantiateLoggers(logging.WithDefaultLevel(zap.InfoLevel))
 
 	homeDir := "/Users/cbillett/t/injective/home/data/"
-	destStore, err := dstore.NewDBinStore("file:///Users/cbillett/t/injective/merged_blocks")
+	//homeDir := "/Users/cbillett/.injective/data/"
+	destStore, err := dstore.NewDBinStore("file:///Users/cbillett/t/injective/one_blocks")
 	if err != nil {
 		return fmt.Errorf("unable to create destination store: %w", err)
 	}
@@ -35,7 +36,6 @@ func Main() error {
 	if err != nil {
 		return err
 	}
-
 	blockStore := store.NewBlockStore(blockDB)
 
 	stateDB, err := dbm.NewDB("state", dbType, homeDir)
@@ -54,9 +54,9 @@ func Main() error {
 
 	merger := block.NewSimpleMerger(blockStore, stateStore, txIndexStore, logger)
 
-	err = merger.GenerateMergeBlock(65543500, 65543465, destStore)
+	err = merger.GenerateOneBlock(65543425, 65543465, destStore)
 	if err != nil {
-		return fmt.Errorf("error generating merge blocks files: %w", err)
+		return fmt.Errorf("error generating one block files: %w", err)
 	}
 
 	return nil
