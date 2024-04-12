@@ -1,4 +1,4 @@
-package block
+package injective
 
 import (
 	"context"
@@ -10,14 +10,11 @@ import (
 	"github.com/cometbft/cometbft/state"
 	txIndex "github.com/cometbft/cometbft/state/txindex/kv"
 	"github.com/cometbft/cometbft/store"
-	cometType "github.com/cometbft/cometbft/types"
-	cosmoProto "github.com/cosmos/gogoproto/proto"
 	"github.com/streamingfast/bstream"
 	pbbstream "github.com/streamingfast/bstream/pb/sf/bstream/v1"
 	"github.com/streamingfast/dstore"
 	pbinj "github.com/streamingfast/firehose-cosmos/pb/sf/injective/type/v1"
 	"go.uber.org/zap"
-	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -297,6 +294,9 @@ func (l *SimpleMerge) loadBlock(height int64) (*pbinj.Block, error) {
 	}
 
 	misbehaviors, err := MisbehaviorsFromEvidences(block.Evidence.Evidence)
+	if err != nil {
+		return nil, fmt.Errorf("converting misbehaviors from evidences: %w", err)
+	}
 
 	pbBlock := &pbinj.Block{
 		Hash:                  block.Hash(),
@@ -312,61 +312,6 @@ func (l *SimpleMerge) loadBlock(height int64) (*pbinj.Block, error) {
 	}
 
 	return pbBlock, nil
-}
-
-func arrayToPointerArray[T any](ts []T) []*T {
-	res := make([]*T, len(ts))
-	for i, t := range ts {
-		res[i] = &t
-	}
-	return res
-}
-
-func arrayProtoFlip[U cosmoProto.Message, V proto.Message](origins []U, targets []V) error {
-	if len(origins) != len(targets) {
-		return fmt.Errorf("origin and target arrays have different lengths: %d != %d", len(origins), len(targets))
-	}
-
-	for i := range origins {
-		err := protoFlip(origins[i], targets[i])
-		if err != nil {
-			return fmt.Errorf("converting element %d: %w", i, err)
-		}
-	}
-
-	return nil
-}
-
-func protoFlip(origin cosmoProto.Message, target proto.Message) error {
-	//marshall origin the unmarshall to target
-	data, err := proto.Marshal(origin.(proto.Message))
-	if err != nil {
-		return fmt.Errorf("mashalling origin object %T: %w", data, err)
-	}
-
-	err = proto.Unmarshal(data, target)
-	if err != nil {
-		return fmt.Errorf("unmashalling target object %T: %w", data, err)
-	}
-
-	return nil
-}
-
-func MisbehaviorsFromEvidences(evidences cometType.EvidenceList) ([]*pbinj.Misbehavior, error) {
-	var misbehaviors []*pbinj.Misbehavior
-	for _, e := range evidences {
-
-		abciMisbehavior := e.ABCI()
-
-		var partial []*pbinj.Misbehavior
-		err := arrayProtoFlip(arrayToPointerArray(abciMisbehavior), partial)
-		if err != nil {
-			return nil, fmt.Errorf("converting abci misbehavior: %w", err)
-		}
-
-		misbehaviors = append(misbehaviors, partial...)
-	}
-	return misbehaviors, nil
 }
 
 func filename(num int64) string {

@@ -3,17 +3,18 @@ package main
 import (
 	"fmt"
 
+	"github.com/streamingfast/firehose-cosmos/block/injective"
+
 	dbm "github.com/cometbft/cometbft-db"
 	"github.com/cometbft/cometbft/state"
 	txindexkv "github.com/cometbft/cometbft/state/txindex/kv"
 	"github.com/cometbft/cometbft/store"
 	"github.com/streamingfast/dstore"
-	"github.com/streamingfast/firehose-cosmos/block"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"
 )
 
-var logger, tracer = logging.PackageLogger("firesol", "github.com/streamingfast/firehose-solana")
+var logger, tracer = logging.PackageLogger("firecosmos", "github.com/streamingfast/firehose-cosmos")
 
 func main() {
 	if err := Main(); err != nil {
@@ -52,7 +53,7 @@ func Main() error {
 	}
 	txIndexStore := txindexkv.NewTxIndex(txIndexDB)
 
-	merger := block.NewSimpleMerger(blockStore, stateStore, txIndexStore, logger)
+	merger := injective.NewSimpleMerger(blockStore, stateStore, txIndexStore, logger)
 
 	err = merger.GenerateOneBlock(65543425, 65543465, destStore)
 	if err != nil {
