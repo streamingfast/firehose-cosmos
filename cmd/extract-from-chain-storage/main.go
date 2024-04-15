@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 
 	"github.com/streamingfast/firehose-cosmos/block/injective"
 
@@ -25,10 +27,23 @@ func main() {
 func Main() error {
 	logging.InstantiateLoggers(logging.WithDefaultLevel(zap.InfoLevel))
 
-	homeDir := "/Users/cbillett/t/injective/home/data/"
-	destStore, err := dstore.NewDBinStore("file:///Users/cbillett/t/injective/merged_blocks")
+	//homeDir := "/Users/cbillett/t/injective/home/data/"
+	//destStore, err := dstore.NewDBinStore("file:///Users/cbillett/t/injective/merged_blocks")
+
+	homeDir := os.Args[1]
+	destStore, err := dstore.NewDBinStore(os.Args[2])
 	if err != nil {
 		return fmt.Errorf("unable to create destination store: %w", err)
+	}
+
+	startBlock, err := strconv.Atoi(os.Args[3])
+	if err != nil {
+		return fmt.Errorf("unable to parse start block: %w", err)
+	}
+	endBlock, err := strconv.Atoi(os.Args[4])
+	if err != nil {
+		return fmt.Errorf("unable to parse end block: %w", err)
+
 	}
 
 	dbType := dbm.BackendType("goleveldb")
@@ -55,7 +70,7 @@ func Main() error {
 
 	merger := injective.NewSimpleMerger(blockStore, stateStore, txIndexStore, logger)
 
-	err = merger.GenerateMergeBlock(65543500, 65543465, destStore)
+	err = merger.GenerateMergeBlock(int64(startBlock), int64(endBlock), destStore)
 	if err != nil {
 		return fmt.Errorf("error generating merge blocks files: %w", err)
 	}

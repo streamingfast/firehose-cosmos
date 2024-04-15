@@ -116,6 +116,17 @@ message EventAttribute {
   //  bool   index = 3;  // nondeterministic
 }
 
+message EventBytes {
+  string                  type = 1;
+  repeated EventAttributeBytes attributes = 2;
+}
+
+message EventAttributeBytes {
+  bytes key = 1;
+  bytes value = 2;
+  //  bool   index = 3;  // nondeterministic
+}
+
 message TxResults {
   uint32 code = 1;
   bytes data = 2;

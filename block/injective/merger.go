@@ -5,16 +5,20 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
+	"reflect"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/state"
 	txIndex "github.com/cometbft/cometbft/state/txindex/kv"
 	"github.com/cometbft/cometbft/store"
+	cometType "github.com/cometbft/cometbft/types"
+	cosmoProto "github.com/cosmos/gogoproto/proto"
 	"github.com/streamingfast/bstream"
 	pbbstream "github.com/streamingfast/bstream/pb/sf/bstream/v1"
 	"github.com/streamingfast/dstore"
 	pbinj "github.com/streamingfast/firehose-cosmos/pb/sf/injective/type/v1"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -233,7 +237,6 @@ func (l *SimpleMerge) ToOneBlockFile(blockNum int64, filename string, destStore 
 }
 
 func (l *SimpleMerge) loadBlock(height int64) (*pbinj.Block, error) {
-
 	block := l.blockStore.LoadBlock(height)
 	if block == nil {
 		return nil, fmt.Errorf("block %d not found", height)
@@ -242,26 +245,25 @@ func (l *SimpleMerge) loadBlock(height int64) (*pbinj.Block, error) {
 	if blockMeta == nil {
 		return nil, fmt.Errorf("block meta %d not found", height)
 	}
-
-	blockResponse, err := l.stateStore.LoadFinalizeBlockResponse(height)
+	abciResponses, err := l.stateStore.LoadABCIResponses(height)
 	if err != nil {
 		return nil, fmt.Errorf("loading finalize block response: %w", err)
 	}
 
-	var txResults []*abci.ExecTxResult
-	for _, tx := range block.Txs {
-		hash := tx.Hash()
-
-		res, err := l.txIndexStore.Get(hash)
-		if err != nil {
-			return nil, fmt.Errorf("loading tx index for hash: %w", err)
-		}
-		if res == nil {
-			return nil, fmt.Errorf("tx index not found for hash %s", hash)
-		}
-		txResults = append(txResults, &res.Result)
-	}
-	blockResponse.TxResults = txResults
+	//var txResults []*abci.ExecTxResult
+	//for _, tx := range block.Txs {
+	//	hash := tx.Hash()
+	//
+	//	res, err := l.txIndexStore.Get(hash)
+	//	if err != nil {
+	//		return nil, fmt.Errorf("loading tx index for hash: %w", err)
+	//	}
+	//	if res == nil {
+	//		return nil, fmt.Errorf("tx index not found for hash %s", hash)
+	//	}
+	//	txResults = append(txResults, &res.Result)
+	//}
+	//abciResponses.TxResults = txResults
 
 	header := &pbinj.Header{}
 	err = protoFlip(blockMeta.Header.ToProto(), header)
@@ -270,25 +272,36 @@ func (l *SimpleMerge) loadBlock(height int64) (*pbinj.Block, error) {
 	}
 
 	consensusParamUpdates := &pbinj.ConsensusParams{}
-	err = protoFlip(blockResponse.ConsensusParamUpdates, consensusParamUpdates)
+	err = protoFlip(abciResponses.EndBlock.ConsensusParamUpdates, consensusParamUpdates)
 	if err != nil {
 		return nil, fmt.Errorf("converting block meta header: %w", err)
 	}
 
-	events := make([]*pbinj.Event, len(blockResponse.Events))
-	err = arrayProtoFlip(arrayToPointerArray(blockResponse.Events), events)
+	abciEvents := abciResponses.BeginBlock.Events
+	abciEvents = append(abciEvents, abciResponses.EndBlock.Events...)
+	events := make([]*pbinj.Event, len(abciEvents))
+	for i, _ := range events {
+		events[i] = &pbinj.Event{}
+	}
+	err = arrayProtoFlip(arrayToPointerArray(abciEvents), events)
 	if err != nil {
 		return nil, fmt.Errorf("converting events: %w", err)
 	}
 
-	trxResults := make([]*pbinj.TxResults, len(blockResponse.TxResults))
-	err = arrayProtoFlip(blockResponse.TxResults, trxResults)
+	trxResults := make([]*pbinj.TxResults, len(abciResponses.DeliverTxs))
+	for i, _ := range trxResults {
+		trxResults[i] = &pbinj.TxResults{}
+	}
+	err = arrayProtoFlip(abciResponses.DeliverTxs, trxResults)
 	if err != nil {
 		return nil, fmt.Errorf("converting tx results: %w", err)
 	}
 
-	validators := make([]*pbinj.ValidatorUpdate, len(blockResponse.ValidatorUpdates))
-	err = arrayProtoFlip(arrayToPointerArray(blockResponse.ValidatorUpdates), validators)
+	validators := make([]*pbinj.ValidatorUpdate, len(abciResponses.EndBlock.ValidatorUpdates))
+	for i, _ := range validators {
+		validators[i] = &pbinj.ValidatorUpdate{}
+	}
+	err = arrayProtoFlip(arrayToPointerArray(abciResponses.EndBlock.ValidatorUpdates), validators)
 	if err != nil {
 		return nil, fmt.Errorf("converting validators: %w", err)
 	}
@@ -312,6 +325,78 @@ func (l *SimpleMerge) loadBlock(height int64) (*pbinj.Block, error) {
 	}
 
 	return pbBlock, nil
+}
+
+func arrayToPointerArray[T any](ts []T) []*T {
+	res := make([]*T, len(ts))
+	for i, t := range ts {
+		res[i] = &t
+	}
+	return res
+}
+
+func arrayProtoFlip[U cosmoProto.Message, V proto.Message](origins []U, targets []V) error {
+	if len(origins) != len(targets) {
+		return fmt.Errorf("origin and target arrays have different lengths: %d != %d", len(origins), len(targets))
+	}
+	if len(origins) == 0 {
+		return nil
+	}
+
+	for i := range origins {
+		err := protoFlip(origins[i], targets[i])
+		if err != nil {
+			return fmt.Errorf("converting element %d: %w", i, err)
+		}
+	}
+
+	return nil
+}
+
+func protoFlip(origin cosmoProto.Message, target proto.Message) error {
+	if origin == nil || reflect.ValueOf(origin).IsNil() {
+		return nil
+	}
+	//marshall origin the unmarshall to target
+	data, err := cosmoProto.Marshal(origin)
+	if err != nil {
+		return fmt.Errorf("mashalling origin object %T: %w", data, err)
+	}
+
+	err = proto.Unmarshal(data, target)
+	if err != nil {
+		if e, ok := origin.(*abci.Event); ok {
+
+			fmt.Println("event data:", data)
+			fmt.Println("type bytes:", []byte(e.Type))
+			fmt.Printf("origin event type %q\n", e.Type)
+			for _, attr := range e.Attributes {
+				fmt.Printf("key: %q, value: %q %t	\n", attr.Key, attr.Value, attr.Index)
+			}
+
+			fmt.Println("data:", string(data))
+		}
+		return fmt.Errorf("unmashalling target object %T: %w", data, err)
+	}
+
+	return nil
+}
+
+func MisbehaviorsFromEvidences(evidences cometType.EvidenceList) ([]*pbinj.Misbehavior, error) {
+	var misbehaviors []*pbinj.Misbehavior
+	for _, e := range evidences {
+
+		abciMisbehavior := e.ABCI()
+
+		var partial []*pbinj.Misbehavior
+		err := arrayProtoFlip(arrayToPointerArray(abciMisbehavior), partial)
+		if err != nil {
+			return nil, fmt.Errorf("converting abci misbehavior: %w", err)
+		}
+
+		misbehaviors = append(misbehaviors, partial...)
+	}
+	return misbehaviors, nil
 }
 
 func filename(num int64) string {
