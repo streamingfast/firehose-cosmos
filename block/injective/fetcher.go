@@ -129,7 +129,9 @@ func convertBlockFromResponse(rpcBlock *ctypes.ResultBlock, rpcBlockResults *cty
 		return nil, fmt.Errorf("converting consensus param updates: %w", err)
 	}
 
-	events, err := convertEventsFromResponse(rpcBlockResults.FinalizeBlockEvents)
+	finalEvents := rpcBlockResults.BeginBlockEvents
+	finalEvents = append(finalEvents, rpcBlockResults.EndBlockEvents...)
+	events, err := convertEventsFromResponse(finalEvents)
 	if err != nil {
 		return nil, fmt.Errorf("converting events: %w", err)
 	}
