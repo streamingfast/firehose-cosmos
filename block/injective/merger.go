@@ -388,13 +388,17 @@ func MisbehaviorsFromEvidences(evidences cometType.EvidenceList) ([]*pbinj.Misbe
 
 		abciMisbehavior := e.ABCI()
 
-		var partial []*pbinj.Misbehavior
-		err := arrayProtoFlip(arrayToPointerArray(abciMisbehavior), partial)
+		partials := make([]*pbinj.Misbehavior, len(abciMisbehavior))
+		for i, _ := range partials {
+			partials[i] = &pbinj.Misbehavior{}
+		}
+
+		err := arrayProtoFlip(arrayToPointerArray(abciMisbehavior), partials)
 		if err != nil {
 			return nil, fmt.Errorf("converting abci misbehavior: %w", err)
 		}
 
-		misbehaviors = append(misbehaviors, partial...)
+		misbehaviors = append(misbehaviors, partials...)
 	}
 	return misbehaviors, nil
 }
@@ -402,3 +406,6 @@ func MisbehaviorsFromEvidences(evidences cometType.EvidenceList) ([]*pbinj.Misbe
 func filename(num int64) string {
 	return fmt.Sprintf("%010d", num)
 }
+
+//{"severity":"INFO","timestamp":"2024-04-16T04:00:27.90788022Z","logger":"firecosmos","message":"closing pipe","error":"loading block 16523806: converting misbehaviors from evidences: converting abci misbehavior: origin and target arrays have different lengths: 1 != 0","logging.googleapis.com/labels":{}}
+//{"severity":"ERROR","timestamp":"2024-04-16T04:00:27.90791386Z","logger":"firecosmos","message":"failed","error":"error generating merge blocks files: generating merge blocks file: writing to store: loading block 16523806: converting misbehaviors from evidences: converting abci misbehavior: origin and target arrays have different lengths: 1 != 0","logging.googleapis.com/labels":{},"serviceContext":{"service":"unknown"}}
