@@ -19,7 +19,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type RPCFetcher struct {
+type RPCBlockFetcher struct {
 	rpcClient                *cometBftHttp.HTTP
 	fetchInterval            time.Duration
 	latestBlockRetryInterval time.Duration
@@ -27,8 +27,8 @@ type RPCFetcher struct {
 	logger                   *zap.Logger
 }
 
-func NewRPCFetcher(rpcClient *cometBftHttp.HTTP, fetchInterval time.Duration, latestBlockRetryInterval time.Duration, logger *zap.Logger) *RPCFetcher {
-	return &RPCFetcher{
+func NewRPCFetcher(rpcClient *cometBftHttp.HTTP, fetchInterval time.Duration, latestBlockRetryInterval time.Duration, logger *zap.Logger) *RPCBlockFetcher {
+	return &RPCBlockFetcher{
 		rpcClient:                rpcClient,
 		fetchInterval:            fetchInterval,
 		latestBlockRetryInterval: latestBlockRetryInterval,
@@ -36,11 +36,11 @@ func NewRPCFetcher(rpcClient *cometBftHttp.HTTP, fetchInterval time.Duration, la
 	}
 }
 
-func (f *RPCFetcher) IsBlockAvailable(requestedSlot uint64) bool {
+func (f *RPCBlockFetcher) IsBlockAvailable(requestedSlot uint64) bool {
 	return true
 }
 
-func (f *RPCFetcher) Fetch(ctx context.Context, requestBlockNum uint64) (b *pbbstream.Block, skipped bool, err error) {
+func (f *RPCBlockFetcher) Fetch(ctx context.Context, requestBlockNum uint64) (b *pbbstream.Block, skipped bool, err error) {
 	f.logger.Info("fetching block", zap.Uint64("block_num", requestBlockNum))
 
 	sleepDuration := time.Duration(0)
@@ -74,7 +74,7 @@ func (f *RPCFetcher) Fetch(ctx context.Context, requestBlockNum uint64) (b *pbbs
 	return bstreamBlock, false, nil
 }
 
-func (f *RPCFetcher) fetch(requestBlockNum uint64) (*ctypes.ResultBlock, *ctypes.ResultBlockResults, error) {
+func (f *RPCBlockFetcher) fetch(requestBlockNum uint64) (*ctypes.ResultBlock, *ctypes.ResultBlockResults, error) {
 	requestBlockNumAsInt := int64(requestBlockNum)
 	var rpcBlockResponse *ctypes.ResultBlock
 	var rpcBlockResults *ctypes.ResultBlockResults
