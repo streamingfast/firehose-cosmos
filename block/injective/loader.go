@@ -71,11 +71,16 @@ func (l *BlockLoader) loadBlock(height int64) (*pbinj.Block, error) {
 		return nil, fmt.Errorf("converting events: %w", err)
 	}
 
-	trxResults := make([]*pbinj.TxResults, len(abciResponses.DeliverTxs))
-	for i, _ := range trxResults {
-		trxResults[i] = &pbinj.TxResults{}
-	}
-	err = arrayProtoFlip(abciResponses.DeliverTxs, trxResults)
+	//trxResults := make([]*pbinj.TxResults, len(abciResponses.DeliverTxs))
+	//for i, _ := range trxResults {
+	//	trxResults[i] = &pbinj.TxResults{}
+	//}
+	//err = arrayProtoFlip(abciResponses.DeliverTxs, trxResults)
+	//if err != nil {
+	//	return nil, fmt.Errorf("converting tx results: %w", err)
+	//}
+
+	trxResults, err := convertDeliverTxs(abciResponses.DeliverTxs)
 	if err != nil {
 		return nil, fmt.Errorf("converting tx results: %w", err)
 	}

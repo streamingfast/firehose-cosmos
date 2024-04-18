@@ -61,11 +61,13 @@ func (f *RPCBlockFetcher) Fetch(ctx context.Context, requestBlockNum uint64) (b 
 		sleepDuration = f.latestBlockRetryInterval
 	}
 
+	f.logger.Info("fetching block", zap.Uint64("block_num", requestBlockNum))
 	rpcBlockResponse, rpcBlockResults, err := f.fetch(requestBlockNum)
 	if err != nil {
 		return nil, false, fmt.Errorf("fetching block %d: %w", requestBlockNum, err)
 	}
 
+	f.logger.Info("converting block", zap.Uint64("block_num", requestBlockNum))
 	bstreamBlock, err := convertBlockFromResponse(rpcBlockResponse, rpcBlockResults)
 	if err != nil {
 		return nil, false, fmt.Errorf("converting block %d from rpc response: %w", requestBlockNum, err)
@@ -80,13 +82,17 @@ func (f *RPCBlockFetcher) fetch(requestBlockNum uint64) (*ctypes.ResultBlock, *c
 	var rpcBlockResults *ctypes.ResultBlockResults
 	err := derr.Retry(math.MaxUint64, func(ctx context.Context) error {
 		var err error
+		f.logger.Info("fetching block from rpc", zap.Int64("block_num", requestBlockNumAsInt))
 		rpcBlockResponse, err = f.rpcClient.Block(ctx, &requestBlockNumAsInt)
 		if err != nil {
+			f.logger.Warn("failed to fetch block from rpc", zap.Int64("block_num", requestBlockNumAsInt), zap.Error(err))
 			return fmt.Errorf("fetching block %d from rpc endpoint: %w", requestBlockNumAsInt, err)
 		}
 
+		f.logger.Info("fetching block results from rpc", zap.Int64("block_num", requestBlockNumAsInt))
 		rpcBlockResults, err = f.rpcClient.BlockResults(ctx, &requestBlockNumAsInt)
 		if err != nil {
+			f.logger.Warn("failed to fetch block results from rpc", zap.Int64("block_num", requestBlockNumAsInt), zap.Error(err))
 			return fmt.Errorf("fetching block results %d from rpc endpoint: %w", requestBlockNumAsInt, err)
 		}
 
@@ -114,10 +120,7 @@ func convertBlockFromResponse(rpcBlock *ctypes.ResultBlock, rpcBlockResults *cty
 		return nil, fmt.Errorf("converting header from response: %w", err)
 	}
 
-	txResults, err := convertTxResultsFromResponse(rpcBlockResults.TxsResults)
-	if err != nil {
-		return nil, fmt.Errorf("converting tx results: %w", err)
-	}
+	txResults, err := convertDeliverTxs(rpcBlockResults.TxsResults)
 
 	validatorUpdates, err := convertValidatorUpdatesFromResponse(rpcBlockResults.ValidatorUpdates)
 	if err != nil {
@@ -182,19 +185,6 @@ func convertEventsFromResponse(responseEvents []abci.Event) ([]*pbinj.Event, err
 
 func convertTxsFromResponse(transactions cometType.Txs) (txs [][]byte) {
 	return transactions.ToSliceOfBytes()
-}
-
-func convertTxResultsFromResponse(transactionResults cometType.ABCIResults) ([]*pbinj.TxResults, error) {
-	trxResults := make([]*pbinj.TxResults, len(transactionResults))
-	for i := range trxResults {
-		trxResults[i] = &pbinj.TxResults{}
-	}
-
-	err := arrayProtoFlip(transactionResults, trxResults)
-	if err != nil {
-		return nil, fmt.Errorf("converting tx results: %w", err)
-	}
-	return trxResults, nil
 }
 
 func convertHeaderFromResponse(responseHeader *cometType.Header) (*pbinj.Header, error) {

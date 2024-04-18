@@ -1,8 +1,11 @@
 package injective
 
 import (
+	"encoding/hex"
 	"fmt"
 	"reflect"
+	"strings"
+	"unicode/utf8"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	cometType "github.com/cometbft/cometbft/types"
@@ -49,21 +52,49 @@ func protoFlip(origin cosmoProto.Message, target proto.Message) error {
 
 	err = proto.Unmarshal(data, target)
 	if err != nil {
-		if e, ok := origin.(*abci.Event); ok {
-
-			fmt.Println("event data:", data)
-			fmt.Println("type bytes:", []byte(e.Type))
-			fmt.Printf("origin event type %q\n", e.Type)
-			for _, attr := range e.Attributes {
-				fmt.Printf("key: %q, value: %q %t	\n", attr.Key, attr.Value, attr.Index)
-			}
-
-			fmt.Println("data:", string(data))
+		if e, ok := origin.(*abci.ResponseDeliverTx); ok {
+			fmt.Println("event data:", hex.EncodeToString(data))
+			fmt.Println("log:", e.Log)
+			fmt.Println("info:", e.Info)
 		}
 		return fmt.Errorf("unmashalling target object %T: %w", data, err)
 	}
 
 	return nil
+}
+
+func convertResponseDeliverTx(tx *abci.ResponseDeliverTx) (*pbinj.TxResults, error) {
+	events := make([]*pbinj.Event, len(tx.Events))
+	for i, _ := range events {
+		events[i] = &pbinj.Event{}
+	}
+	err := arrayProtoFlip(arrayToPointerArray(tx.Events), events)
+	if err != nil {
+		return nil, fmt.Errorf("converting events: %w", err)
+	}
+
+	fixedLog := strings.Map(fixUtf, tx.Log)
+
+	txResults := &pbinj.TxResults{
+		Code:      tx.Code,
+		Data:      tx.Data,
+		Log:       fixedLog,
+		Info:      tx.Info,
+		GasWanted: tx.GasWanted,
+		GasUsed:   tx.GasUsed,
+		Events:    events,
+		Codespace: tx.Codespace,
+	}
+
+	return txResults, nil
+}
+
+func convertDeliverTxs(txs []*abci.ResponseDeliverTx) ([]*pbinj.TxResults, error) {
+	txResults := make([]*pbinj.TxResults, len(txs))
+	for i, tx := range txs {
+		txResults[i], _ = convertResponseDeliverTx(tx)
+	}
+	return txResults, nil
 }
 
 func MisbehaviorsFromEvidences(evidences cometType.EvidenceList) ([]*pbinj.Misbehavior, error) {
@@ -85,4 +116,12 @@ func MisbehaviorsFromEvidences(evidences cometType.EvidenceList) ([]*pbinj.Misbe
 		misbehaviors = append(misbehaviors, partials...)
 	}
 	return misbehaviors, nil
+}
+
+func fixUtf(r rune) rune {
+	if r == utf8.RuneError {
+		fmt.Println("found rune error")
+		return '�'
+	}
+	return r
 }
