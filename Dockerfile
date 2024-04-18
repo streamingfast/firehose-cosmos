@@ -17,6 +17,6 @@ ADD /firecosmos /app/firecosmos
 
 ENV PATH "$PATH:/app"
 
-COPY --from=core /app/firecosmos /app/firecosmos
+COPY --from=core /app/firecore /app/firecore
 
 ENTRYPOINT ["/app/firecosmos"]
