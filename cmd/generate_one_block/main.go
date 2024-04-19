@@ -53,7 +53,8 @@ func Main() error {
 	}
 	txIndexStore := txindexkv.NewTxIndex(txIndexDB)
 
-	merger := injective.NewSimpleMerger(blockStore, stateStore, txIndexStore, logger)
+	loader := injective.NewLoader(blockStore, stateStore, txIndexStore, logger)
+	merger := injective.NewSimpleMerger(loader, logger)
 
 	err = merger.GenerateOneBlock(65543425, 65543465, destStore)
 	if err != nil {
