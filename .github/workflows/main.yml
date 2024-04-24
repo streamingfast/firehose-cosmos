@@ -41,8 +41,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      - name: Run Tests
+      - name: Run Injective Tests
+        working-directory: ./injective
         run: go test ./...
 
-      - name: Build
+      - name: Build Injective
+        working-directory: ./injective
         run: go build ./...

@@ -13,7 +13,7 @@ import (
 	cometType "github.com/cometbft/cometbft/types"
 	pbbstream "github.com/streamingfast/bstream/pb/sf/bstream/v1"
 	"github.com/streamingfast/derr"
-	pbinj "github.com/streamingfast/firehose-cosmos/pb/sf/injective/type/v1"
+	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v1"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -139,7 +139,7 @@ func convertBlockFromResponse(rpcBlock *ctypes.ResultBlock, rpcBlockResults *cty
 		return nil, fmt.Errorf("converting events: %w", err)
 	}
 
-	injectiveBlock := &pbinj.Block{
+	injectiveBlock := &pbcosmos.Block{
 		Hash:                  blockHash,
 		Height:                blockHeight,
 		Time:                  blockTimestamp,
@@ -170,10 +170,10 @@ func convertBlockFromResponse(rpcBlock *ctypes.ResultBlock, rpcBlockResults *cty
 	return bstreamBlock, nil
 }
 
-func convertEventsFromResponse(responseEvents []abci.Event) ([]*pbinj.Event, error) {
-	events := make([]*pbinj.Event, len(responseEvents))
+func convertEventsFromResponse(responseEvents []abci.Event) ([]*pbcosmos.Event, error) {
+	events := make([]*pbcosmos.Event, len(responseEvents))
 	for i := range events {
-		events[i] = &pbinj.Event{}
+		events[i] = &pbcosmos.Event{}
 	}
 
 	err := arrayProtoFlip(arrayToPointerArray(responseEvents), events)
@@ -187,8 +187,8 @@ func convertTxsFromResponse(transactions cometType.Txs) (txs [][]byte) {
 	return transactions.ToSliceOfBytes()
 }
 
-func convertHeaderFromResponse(responseHeader *cometType.Header) (*pbinj.Header, error) {
-	header := &pbinj.Header{}
+func convertHeaderFromResponse(responseHeader *cometType.Header) (*pbcosmos.Header, error) {
+	header := &pbcosmos.Header{}
 
 	err := protoFlip(responseHeader.ToProto(), header)
 	if err != nil {
@@ -198,10 +198,10 @@ func convertHeaderFromResponse(responseHeader *cometType.Header) (*pbinj.Header,
 	return header, nil
 }
 
-func convertValidatorUpdatesFromResponse(validatorUpdates []abci.ValidatorUpdate) ([]*pbinj.ValidatorUpdate, error) {
-	validators := make([]*pbinj.ValidatorUpdate, len(validatorUpdates))
+func convertValidatorUpdatesFromResponse(validatorUpdates []abci.ValidatorUpdate) ([]*pbcosmos.ValidatorUpdate, error) {
+	validators := make([]*pbcosmos.ValidatorUpdate, len(validatorUpdates))
 	for i := range validators {
-		validators[i] = &pbinj.ValidatorUpdate{}
+		validators[i] = &pbcosmos.ValidatorUpdate{}
 	}
 
 	err := arrayProtoFlip(arrayToPointerArray(validatorUpdates), validators)
@@ -211,8 +211,8 @@ func convertValidatorUpdatesFromResponse(validatorUpdates []abci.ValidatorUpdate
 	return validators, nil
 }
 
-func convertConsensusParamUpdatesFromResponse(consensusParamUpdates *types.ConsensusParams) (*pbinj.ConsensusParams, error) {
-	out := &pbinj.ConsensusParams{}
+func convertConsensusParamUpdatesFromResponse(consensusParamUpdates *types.ConsensusParams) (*pbcosmos.ConsensusParams, error) {
+	out := &pbcosmos.ConsensusParams{}
 	err := protoFlip(consensusParamUpdates, out)
 	if err != nil {
 		return nil, fmt.Errorf("converting consensus param updates: %w", err)

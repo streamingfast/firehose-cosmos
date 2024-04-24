@@ -10,7 +10,7 @@ import (
 	"github.com/streamingfast/cli/sflags"
 	firecore "github.com/streamingfast/firehose-core"
 	"github.com/streamingfast/firehose-core/blockpoller"
-	"github.com/streamingfast/firehose-cosmos/block/injective"
+	"github.com/streamingfast/firehose-cosmos/injective"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"
 )

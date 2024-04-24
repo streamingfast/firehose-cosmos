@@ -6,7 +6,7 @@ import (
 	"github.com/cometbft/cometbft/state"
 	txIndex "github.com/cometbft/cometbft/state/txindex/kv"
 	"github.com/cometbft/cometbft/store"
-	pbinj "github.com/streamingfast/firehose-cosmos/pb/sf/injective/type/v1"
+	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v1"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -34,7 +34,7 @@ func (l *BlockLoader) BlockRange() (int64, int64) {
 	return first, last
 }
 
-func (l *BlockLoader) loadBlock(height int64) (*pbinj.Block, error) {
+func (l *BlockLoader) loadBlock(height int64) (*pbcosmos.Block, error) {
 	block := l.blockStore.LoadBlock(height)
 	if block == nil {
 		return nil, fmt.Errorf("block %d not found", height)
@@ -48,13 +48,13 @@ func (l *BlockLoader) loadBlock(height int64) (*pbinj.Block, error) {
 		return nil, fmt.Errorf("loading finalize block response: %w", err)
 	}
 
-	header := &pbinj.Header{}
+	header := &pbcosmos.Header{}
 	err = protoFlip(blockMeta.Header.ToProto(), header)
 	if err != nil {
 		return nil, fmt.Errorf("converting block meta header: %w", err)
 	}
 
-	consensusParamUpdates := &pbinj.ConsensusParams{}
+	consensusParamUpdates := &pbcosmos.ConsensusParams{}
 	err = protoFlip(abciResponses.EndBlock.ConsensusParamUpdates, consensusParamUpdates)
 	if err != nil {
 		return nil, fmt.Errorf("converting block meta header: %w", err)
@@ -62,18 +62,18 @@ func (l *BlockLoader) loadBlock(height int64) (*pbinj.Block, error) {
 
 	abciEvents := abciResponses.BeginBlock.Events
 	abciEvents = append(abciEvents, abciResponses.EndBlock.Events...)
-	events := make([]*pbinj.Event, len(abciEvents))
+	events := make([]*pbcosmos.Event, len(abciEvents))
 	for i, _ := range events {
-		events[i] = &pbinj.Event{}
+		events[i] = &pbcosmos.Event{}
 	}
 	err = arrayProtoFlip(arrayToPointerArray(abciEvents), events)
 	if err != nil {
 		return nil, fmt.Errorf("converting events: %w", err)
 	}
 
-	//trxResults := make([]*pbinj.TxResults, len(abciResponses.DeliverTxs))
+	//trxResults := make([]*pbcosmos.TxResults, len(abciResponses.DeliverTxs))
 	//for i, _ := range trxResults {
-	//	trxResults[i] = &pbinj.TxResults{}
+	//	trxResults[i] = &pbcosmos.TxResults{}
 	//}
 	//err = arrayProtoFlip(abciResponses.DeliverTxs, trxResults)
 	//if err != nil {
@@ -85,9 +85,9 @@ func (l *BlockLoader) loadBlock(height int64) (*pbinj.Block, error) {
 		return nil, fmt.Errorf("converting tx results: %w", err)
 	}
 
-	validators := make([]*pbinj.ValidatorUpdate, len(abciResponses.EndBlock.ValidatorUpdates))
+	validators := make([]*pbcosmos.ValidatorUpdate, len(abciResponses.EndBlock.ValidatorUpdates))
 	for i, _ := range validators {
-		validators[i] = &pbinj.ValidatorUpdate{}
+		validators[i] = &pbcosmos.ValidatorUpdate{}
 	}
 	err = arrayProtoFlip(arrayToPointerArray(abciResponses.EndBlock.ValidatorUpdates), validators)
 	if err != nil {
@@ -99,7 +99,7 @@ func (l *BlockLoader) loadBlock(height int64) (*pbinj.Block, error) {
 		return nil, fmt.Errorf("converting misbehaviors from evidences: %w", err)
 	}
 
-	pbBlock := &pbinj.Block{
+	pbBlock := &pbcosmos.Block{
 		Hash:                  block.Hash(),
 		Height:                block.Height,
 		Time:                  timestamppb.New(block.Time),

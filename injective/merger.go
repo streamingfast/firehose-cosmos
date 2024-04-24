@@ -33,9 +33,9 @@ func (m *SimpleMerge) GenerateMergeBlock(startBlock int64, endBlock int64, destS
 	if startBlock < first {
 		return fmt.Errorf("start block %d is before the first block %d of current snapshot", startBlock, first)
 	}
-	if startBlock%100 != 0 {
-		return fmt.Errorf("start block %d is not a boundary", startBlock)
-	}
+	//if startBlock%100 != 0 {
+	//	return fmt.Errorf("start block %d is not a boundary", startBlock)
+	//}
 
 	if endBlock > last {
 		return fmt.Errorf("end block %d is after the last block %d of current snapshot", endBlock, last)
@@ -117,7 +117,10 @@ func (m *SimpleMerge) ToMergeBlockFile(startBlock int64, filename string, destSt
 			m.logger.Info("closing pipe", zap.Error(processErr))
 		}()
 
-		for height := startBlock; height <= startBlock+99; height++ {
+		//round down to the nearest 100
+		endBlock := (startBlock - (startBlock % 100)) + 99
+
+		for height := startBlock; height <= endBlock; height++ {
 			m.logger.Debug("loading block", zap.Int64("height", height))
 			block, err := m.blockLoader.loadBlock(height)
 			if err != nil {

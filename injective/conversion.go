@@ -10,7 +10,7 @@ import (
 	abci "github.com/cometbft/cometbft/abci/types"
 	cometType "github.com/cometbft/cometbft/types"
 	cosmoProto "github.com/cosmos/gogoproto/proto"
-	pbinj "github.com/streamingfast/firehose-cosmos/pb/sf/injective/type/v1"
+	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v1"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -63,10 +63,10 @@ func protoFlip(origin cosmoProto.Message, target proto.Message) error {
 	return nil
 }
 
-func convertResponseDeliverTx(tx *abci.ResponseDeliverTx) (*pbinj.TxResults, error) {
-	events := make([]*pbinj.Event, len(tx.Events))
+func convertResponseDeliverTx(tx *abci.ResponseDeliverTx) (*pbcosmos.TxResults, error) {
+	events := make([]*pbcosmos.Event, len(tx.Events))
 	for i, _ := range events {
-		events[i] = &pbinj.Event{}
+		events[i] = &pbcosmos.Event{}
 	}
 	err := arrayProtoFlip(arrayToPointerArray(tx.Events), events)
 	if err != nil {
@@ -75,7 +75,7 @@ func convertResponseDeliverTx(tx *abci.ResponseDeliverTx) (*pbinj.TxResults, err
 
 	fixedLog := strings.Map(fixUtf, tx.Log)
 
-	txResults := &pbinj.TxResults{
+	txResults := &pbcosmos.TxResults{
 		Code:      tx.Code,
 		Data:      tx.Data,
 		Log:       fixedLog,
@@ -89,23 +89,23 @@ func convertResponseDeliverTx(tx *abci.ResponseDeliverTx) (*pbinj.TxResults, err
 	return txResults, nil
 }
 
-func convertDeliverTxs(txs []*abci.ResponseDeliverTx) ([]*pbinj.TxResults, error) {
-	txResults := make([]*pbinj.TxResults, len(txs))
+func convertDeliverTxs(txs []*abci.ResponseDeliverTx) ([]*pbcosmos.TxResults, error) {
+	txResults := make([]*pbcosmos.TxResults, len(txs))
 	for i, tx := range txs {
 		txResults[i], _ = convertResponseDeliverTx(tx)
 	}
 	return txResults, nil
 }
 
-func MisbehaviorsFromEvidences(evidences cometType.EvidenceList) ([]*pbinj.Misbehavior, error) {
-	var misbehaviors []*pbinj.Misbehavior
+func MisbehaviorsFromEvidences(evidences cometType.EvidenceList) ([]*pbcosmos.Misbehavior, error) {
+	var misbehaviors []*pbcosmos.Misbehavior
 	for _, e := range evidences {
 
 		abciMisbehavior := e.ABCI()
 
-		partials := make([]*pbinj.Misbehavior, len(abciMisbehavior))
+		partials := make([]*pbcosmos.Misbehavior, len(abciMisbehavior))
 		for i, _ := range partials {
-			partials[i] = &pbinj.Misbehavior{}
+			partials[i] = &pbcosmos.Misbehavior{}
 		}
 
 		err := arrayProtoFlip(arrayToPointerArray(abciMisbehavior), partials)
