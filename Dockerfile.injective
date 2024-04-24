@@ -1,9 +1,0 @@
-ARG FIREHOSE_CORE_VERSION="latest"
-ARG INJECTIVE_CORE_VERSION="latest"
-FROM ubuntu:22.04
-
-FROM injective-core-build:${INJECTIVE_CORE_VERSION} as injectived
-FROM ghcr.io/streamingfast/firehose-core:${INJECTIVE_CORE_VERSION} as core
-
-COPY --from=injectived /app/injectived /app/injectived
-COPY --from=core /app/firecore /app/firecore
