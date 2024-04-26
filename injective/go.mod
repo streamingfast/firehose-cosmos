@@ -12,6 +12,7 @@ require (
 	github.com/cometbft/cometbft v0.0.0-00010101000000-000000000000
 	github.com/cometbft/cometbft-db v0.12.0
 	github.com/cosmos/gogoproto v1.4.12
+	github.com/hashicorp/go-multierror v1.1.1
 	github.com/spf13/cobra v1.8.0
 	github.com/streamingfast/bstream v0.0.2-0.20240411144308-aa5af1afe397
 	github.com/streamingfast/cli v0.0.4-0.20240412191021-5f81842cb71d
@@ -106,6 +107,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0 // indirect
 	github.com/gtank/merlin v0.1.1 // indirect
+	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/ipfs/boxo v0.8.0 // indirect
