@@ -17,12 +17,13 @@ import (
 
 func NewFetchCmd(logger *zap.Logger, tracer logging.Tracer, cosmosChain string) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "rpc <rpc-endpoint> <first-streamable-block>",
+		Use:   "rpc <first-streamable-block>",
 		Short: "fetch blocks from rpc endpoint",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(1),
 		RunE:  fetchRunE(logger, tracer, cosmosChain),
 	}
 
+	cmd.Flags().StringArray("endpoints", []string{"https://sentry.tm.injective.network:443"}, "interval between fetch")
 	cmd.Flags().String("state-dir", "/data/poller", "interval between fetch")
 	cmd.Flags().Duration("interval-between-fetch", 0, "interval between fetch")
 	cmd.Flags().Duration("latest-block-retry-interval", time.Second, "interval between fetch")
@@ -34,11 +35,11 @@ func NewFetchCmd(logger *zap.Logger, tracer logging.Tracer, cosmosChain string) 
 func fetchRunE(logger *zap.Logger, tracer logging.Tracer, cosmosChain string) firecore.CommandExecutor {
 	return func(cmd *cobra.Command, args []string) (err error) {
 		ctx := cmd.Context()
-		rpcEndpoint := args[0]
+		rpcEndpoints := sflags.MustGetStringArray(cmd, "endpoints")
 
 		stateDir := sflags.MustGetString(cmd, "state-dir")
 
-		startBlock, err := strconv.ParseUint(args[1], 10, 64)
+		startBlock, err := strconv.ParseUint(args[0], 10, 64)
 		if err != nil {
 			return fmt.Errorf("unable to parse first streamable block %d: %w", startBlock, err)
 		}
@@ -47,16 +48,20 @@ func fetchRunE(logger *zap.Logger, tracer logging.Tracer, cosmosChain string) fi
 
 		logger.Info(
 			"launching firehose-cosmos poller",
-			zap.String("rpc_endpoint", rpcEndpoint),
+			zap.Strings("rpc_endpoint", rpcEndpoints),
 			zap.String("state_dir", stateDir),
 			zap.Uint64("first_streamable_block", startBlock),
 			zap.Duration("interval_between_fetch", fetchInterval),
 			zap.Duration("latest_block_retry_interval", sflags.MustGetDuration(cmd, "latest-block-retry-interval")),
 		)
 
-		rpcClient, err := cometBftHttp.New(rpcEndpoint, "")
-		if err != nil {
-			return fmt.Errorf("creating rpc client: %w", err)
+		rpcClients := make([]*cometBftHttp.HTTP, 0, len(rpcEndpoints))
+		for _, rpcEndpoint := range rpcEndpoints {
+			client, err := cometBftHttp.New(rpcEndpoint, "")
+			if err != nil {
+				return fmt.Errorf("creating rpc client: %w", err)
+			}
+			rpcClients = append(rpcClients, client)
 		}
 
 		latestBlockRetryInterval := sflags.MustGetDuration(cmd, "latest-block-retry-interval")
@@ -64,7 +69,7 @@ func fetchRunE(logger *zap.Logger, tracer logging.Tracer, cosmosChain string) fi
 		var rpcFetcher blockpoller.BlockFetcher
 
 		if cosmosChain == "injective" {
-			rpcFetcher = injective.NewRPCFetcher(rpcClient, fetchInterval, latestBlockRetryInterval, logger)
+			rpcFetcher = injective.NewRPCFetcher(rpcClients, fetchInterval, latestBlockRetryInterval, logger)
 		}
 
 		poller := blockpoller.New(

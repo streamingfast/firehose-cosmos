@@ -11,6 +11,7 @@ import (
 	cometBftHttp "github.com/cometbft/cometbft/rpc/client/http"
 	ctypes "github.com/cometbft/cometbft/rpc/core/types"
 	cometType "github.com/cometbft/cometbft/types"
+	"github.com/hashicorp/go-multierror"
 	pbbstream "github.com/streamingfast/bstream/pb/sf/bstream/v1"
 	"github.com/streamingfast/derr"
 	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v1"
@@ -20,16 +21,16 @@ import (
 )
 
 type RPCBlockFetcher struct {
-	rpcClient                *cometBftHttp.HTTP
+	rpcClients               []*cometBftHttp.HTTP
 	fetchInterval            time.Duration
 	latestBlockRetryInterval time.Duration
 	latestBlockNum           uint64
 	logger                   *zap.Logger
 }
 
-func NewRPCFetcher(rpcClient *cometBftHttp.HTTP, fetchInterval time.Duration, latestBlockRetryInterval time.Duration, logger *zap.Logger) *RPCBlockFetcher {
+func NewRPCFetcher(rpcClients []*cometBftHttp.HTTP, fetchInterval time.Duration, latestBlockRetryInterval time.Duration, logger *zap.Logger) *RPCBlockFetcher {
 	return &RPCBlockFetcher{
-		rpcClient:                rpcClient,
+		rpcClients:               rpcClients,
 		fetchInterval:            fetchInterval,
 		latestBlockRetryInterval: latestBlockRetryInterval,
 		logger:                   logger,
@@ -40,18 +41,32 @@ func (f *RPCBlockFetcher) IsBlockAvailable(requestedSlot uint64) bool {
 	return true
 }
 
+func (f *RPCBlockFetcher) fetchLatestBlockNum(ctx context.Context) (uint64, error) {
+	var errs error
+	for _, rpcClient := range f.rpcClients {
+		resultChainInfo, err := rpcClient.BlockchainInfo(ctx, 0, 0)
+		if err != nil {
+			f.logger.Warn("failed to fetch latest block num, trying next client", zap.Error(err))
+			errs = multierror.Append(errs, err)
+			continue
+		}
+		return uint64(resultChainInfo.LastHeight), nil
+	}
+
+	return 0, errs
+}
+
 func (f *RPCBlockFetcher) Fetch(ctx context.Context, requestBlockNum uint64) (b *pbbstream.Block, skipped bool, err error) {
 	f.logger.Info("fetching block", zap.Uint64("block_num", requestBlockNum))
 
 	sleepDuration := time.Duration(0)
 	for f.latestBlockNum < requestBlockNum {
 		time.Sleep(sleepDuration)
-		resultChainInfo, err := f.rpcClient.BlockchainInfo(ctx, 0, 0)
-		if err != nil {
-			return nil, false, fmt.Errorf("fetching last block num: %w", err)
-		}
 
-		f.latestBlockNum = uint64(resultChainInfo.LastHeight)
+		f.latestBlockNum, err = f.fetchLatestBlockNum(ctx)
+		if err != nil {
+			return nil, false, fmt.Errorf("fetching latest block num: %w", err)
+		}
 
 		f.logger.Info("got latest block num", zap.Uint64("latest_block_num", f.latestBlockNum), zap.Uint64("requested_block_num", requestBlockNum))
 
@@ -76,21 +91,52 @@ func (f *RPCBlockFetcher) Fetch(ctx context.Context, requestBlockNum uint64) (b 
 	return bstreamBlock, false, nil
 }
 
+func (f *RPCBlockFetcher) fetchBlock(ctx context.Context, requestBlockNum int64) (*ctypes.ResultBlock, error) {
+	var errs error
+	for _, rpcClient := range f.rpcClients {
+		rpcBlockResponse, err := rpcClient.Block(ctx, &requestBlockNum)
+		if err != nil {
+			f.logger.Warn("failed to fetch block from rpc", zap.Int64("block_num", requestBlockNum), zap.Error(err))
+			errs = multierror.Append(errs, err)
+			continue
+		}
+		return rpcBlockResponse, nil
+	}
+
+	return nil, errs
+}
+
+func (f *RPCBlockFetcher) fetchBlockResults(ctx context.Context, requestBlockNum int64) (*ctypes.ResultBlockResults, error) {
+	var errs error
+	for _, rpcClient := range f.rpcClients {
+		rpcBlockResults, err := rpcClient.BlockResults(ctx, &requestBlockNum)
+		if err != nil {
+			f.logger.Warn("failed to fetch block results from rpc", zap.Int64("block_num", requestBlockNum), zap.Error(err))
+			errs = multierror.Append(errs, err)
+			continue
+		}
+		return rpcBlockResults, nil
+	}
+
+	return nil, errs
+}
+
 func (f *RPCBlockFetcher) fetch(requestBlockNum uint64) (*ctypes.ResultBlock, *ctypes.ResultBlockResults, error) {
 	requestBlockNumAsInt := int64(requestBlockNum)
-	var rpcBlockResponse *ctypes.ResultBlock
+	var block *ctypes.ResultBlock
 	var rpcBlockResults *ctypes.ResultBlockResults
+
 	err := derr.Retry(math.MaxUint64, func(ctx context.Context) error {
 		var err error
 		f.logger.Info("fetching block from rpc", zap.Int64("block_num", requestBlockNumAsInt))
-		rpcBlockResponse, err = f.rpcClient.Block(ctx, &requestBlockNumAsInt)
+		block, err = f.fetchBlock(ctx, requestBlockNumAsInt)
 		if err != nil {
 			f.logger.Warn("failed to fetch block from rpc", zap.Int64("block_num", requestBlockNumAsInt), zap.Error(err))
 			return fmt.Errorf("fetching block %d from rpc endpoint: %w", requestBlockNumAsInt, err)
 		}
 
 		f.logger.Info("fetching block results from rpc", zap.Int64("block_num", requestBlockNumAsInt))
-		rpcBlockResults, err = f.rpcClient.BlockResults(ctx, &requestBlockNumAsInt)
+		rpcBlockResults, err = f.fetchBlockResults(ctx, requestBlockNumAsInt)
 		if err != nil {
 			f.logger.Warn("failed to fetch block results from rpc", zap.Int64("block_num", requestBlockNumAsInt), zap.Error(err))
 			return fmt.Errorf("fetching block results %d from rpc endpoint: %w", requestBlockNumAsInt, err)
@@ -102,7 +148,7 @@ func (f *RPCBlockFetcher) fetch(requestBlockNum uint64) (*ctypes.ResultBlock, *c
 		return nil, nil, fmt.Errorf("after retrying fetch block %d: %w", requestBlockNum, err)
 	}
 
-	return rpcBlockResponse, rpcBlockResults, nil
+	return block, rpcBlockResults, nil
 }
 
 func convertBlockFromResponse(rpcBlock *ctypes.ResultBlock, rpcBlockResults *ctypes.ResultBlockResults) (*pbbstream.Block, error) {
