@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.27.1
 // 	protoc        (unknown)
-// source: sf/cosmos/type/v1/block.proto
+// source: sf/cosmos/type/v2/block.proto
 
 package pbcomos
 
@@ -55,11 +55,11 @@ func (x MisbehaviorType) String() string {
 }
 
 func (MisbehaviorType) Descriptor() protoreflect.EnumDescriptor {
-	return file_sf_cosmos_type_v1_block_proto_enumTypes[0].Descriptor()
+	return file_sf_cosmos_type_v2_block_proto_enumTypes[0].Descriptor()
 }
 
 func (MisbehaviorType) Type() protoreflect.EnumType {
-	return &file_sf_cosmos_type_v1_block_proto_enumTypes[0]
+	return &file_sf_cosmos_type_v2_block_proto_enumTypes[0]
 }
 
 func (x MisbehaviorType) Number() protoreflect.EnumNumber {
@@ -68,7 +68,7 @@ func (x MisbehaviorType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MisbehaviorType.Descriptor instead.
 func (MisbehaviorType) EnumDescriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{0}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{0}
 }
 
 // Firehose-centric Block
@@ -92,7 +92,7 @@ type Block struct {
 func (x *Block) Reset() {
 	*x = Block{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[0]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -105,7 +105,7 @@ func (x *Block) String() string {
 func (*Block) ProtoMessage() {}
 
 func (x *Block) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[0]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -118,7 +118,7 @@ func (x *Block) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Block.ProtoReflect.Descriptor instead.
 func (*Block) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{0}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Block) GetHash() []byte {
@@ -221,7 +221,7 @@ type Header struct {
 func (x *Header) Reset() {
 	*x = Header{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[1]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -234,7 +234,7 @@ func (x *Header) String() string {
 func (*Header) ProtoMessage() {}
 
 func (x *Header) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[1]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -247,7 +247,7 @@ func (x *Header) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Header.ProtoReflect.Descriptor instead.
 func (*Header) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{1}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Header) GetVersion() *Consensus {
@@ -360,7 +360,7 @@ type Consensus struct {
 func (x *Consensus) Reset() {
 	*x = Consensus{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[2]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -373,7 +373,7 @@ func (x *Consensus) String() string {
 func (*Consensus) ProtoMessage() {}
 
 func (x *Consensus) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[2]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -386,7 +386,7 @@ func (x *Consensus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Consensus.ProtoReflect.Descriptor instead.
 func (*Consensus) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{2}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Consensus) GetBlock() uint64 {
@@ -415,7 +415,7 @@ type BlockID struct {
 func (x *BlockID) Reset() {
 	*x = BlockID{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[3]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -428,7 +428,7 @@ func (x *BlockID) String() string {
 func (*BlockID) ProtoMessage() {}
 
 func (x *BlockID) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[3]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -441,7 +441,7 @@ func (x *BlockID) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlockID.ProtoReflect.Descriptor instead.
 func (*BlockID) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{3}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *BlockID) GetHash() []byte {
@@ -470,7 +470,7 @@ type PartSetHeader struct {
 func (x *PartSetHeader) Reset() {
 	*x = PartSetHeader{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[4]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -483,7 +483,7 @@ func (x *PartSetHeader) String() string {
 func (*PartSetHeader) ProtoMessage() {}
 
 func (x *PartSetHeader) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[4]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -496,7 +496,7 @@ func (x *PartSetHeader) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PartSetHeader.ProtoReflect.Descriptor instead.
 func (*PartSetHeader) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{4}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *PartSetHeader) GetTotal() uint32 {
@@ -534,7 +534,7 @@ type Misbehavior struct {
 func (x *Misbehavior) Reset() {
 	*x = Misbehavior{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[5]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -547,7 +547,7 @@ func (x *Misbehavior) String() string {
 func (*Misbehavior) ProtoMessage() {}
 
 func (x *Misbehavior) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[5]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -560,7 +560,7 @@ func (x *Misbehavior) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Misbehavior.ProtoReflect.Descriptor instead.
 func (*Misbehavior) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{5}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Misbehavior) GetType() MisbehaviorType {
@@ -610,7 +610,7 @@ type Validator struct {
 func (x *Validator) Reset() {
 	*x = Validator{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[6]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -623,7 +623,7 @@ func (x *Validator) String() string {
 func (*Validator) ProtoMessage() {}
 
 func (x *Validator) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[6]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -636,7 +636,7 @@ func (x *Validator) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Validator.ProtoReflect.Descriptor instead.
 func (*Validator) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{6}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Validator) GetAddress() []byte {
@@ -665,7 +665,7 @@ type Event struct {
 func (x *Event) Reset() {
 	*x = Event{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[7]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -678,7 +678,7 @@ func (x *Event) String() string {
 func (*Event) ProtoMessage() {}
 
 func (x *Event) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[7]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -691,7 +691,7 @@ func (x *Event) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Event.ProtoReflect.Descriptor instead.
 func (*Event) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{7}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Event) GetType() string {
@@ -720,7 +720,7 @@ type EventAttribute struct {
 func (x *EventAttribute) Reset() {
 	*x = EventAttribute{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[8]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -733,7 +733,7 @@ func (x *EventAttribute) String() string {
 func (*EventAttribute) ProtoMessage() {}
 
 func (x *EventAttribute) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[8]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -746,7 +746,7 @@ func (x *EventAttribute) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventAttribute.ProtoReflect.Descriptor instead.
 func (*EventAttribute) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{8}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *EventAttribute) GetKey() string {
@@ -775,7 +775,7 @@ type EventBytes struct {
 func (x *EventBytes) Reset() {
 	*x = EventBytes{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[9]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -788,7 +788,7 @@ func (x *EventBytes) String() string {
 func (*EventBytes) ProtoMessage() {}
 
 func (x *EventBytes) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[9]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -801,7 +801,7 @@ func (x *EventBytes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventBytes.ProtoReflect.Descriptor instead.
 func (*EventBytes) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{9}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *EventBytes) GetType() string {
@@ -830,7 +830,7 @@ type EventAttributeBytes struct {
 func (x *EventAttributeBytes) Reset() {
 	*x = EventAttributeBytes{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[10]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -843,7 +843,7 @@ func (x *EventAttributeBytes) String() string {
 func (*EventAttributeBytes) ProtoMessage() {}
 
 func (x *EventAttributeBytes) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[10]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -856,7 +856,7 @@ func (x *EventAttributeBytes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventAttributeBytes.ProtoReflect.Descriptor instead.
 func (*EventAttributeBytes) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{10}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *EventAttributeBytes) GetKey() []byte {
@@ -891,7 +891,7 @@ type TxResults struct {
 func (x *TxResults) Reset() {
 	*x = TxResults{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[11]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -904,7 +904,7 @@ func (x *TxResults) String() string {
 func (*TxResults) ProtoMessage() {}
 
 func (x *TxResults) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[11]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -917,7 +917,7 @@ func (x *TxResults) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TxResults.ProtoReflect.Descriptor instead.
 func (*TxResults) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{11}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *TxResults) GetCode() uint32 {
@@ -989,7 +989,7 @@ type ValidatorUpdate struct {
 func (x *ValidatorUpdate) Reset() {
 	*x = ValidatorUpdate{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[12]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1002,7 +1002,7 @@ func (x *ValidatorUpdate) String() string {
 func (*ValidatorUpdate) ProtoMessage() {}
 
 func (x *ValidatorUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[12]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1015,7 +1015,7 @@ func (x *ValidatorUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidatorUpdate.ProtoReflect.Descriptor instead.
 func (*ValidatorUpdate) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{12}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ValidatorUpdate) GetPubKey() *PublicKey {
@@ -1047,7 +1047,7 @@ type PublicKey struct {
 func (x *PublicKey) Reset() {
 	*x = PublicKey{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[13]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1060,7 +1060,7 @@ func (x *PublicKey) String() string {
 func (*PublicKey) ProtoMessage() {}
 
 func (x *PublicKey) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[13]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1073,7 +1073,7 @@ func (x *PublicKey) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublicKey.ProtoReflect.Descriptor instead.
 func (*PublicKey) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{13}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{13}
 }
 
 func (m *PublicKey) GetSum() isPublicKey_Sum {
@@ -1127,7 +1127,7 @@ type ConsensusParams struct {
 func (x *ConsensusParams) Reset() {
 	*x = ConsensusParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[14]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1140,7 +1140,7 @@ func (x *ConsensusParams) String() string {
 func (*ConsensusParams) ProtoMessage() {}
 
 func (x *ConsensusParams) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[14]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1153,7 +1153,7 @@ func (x *ConsensusParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConsensusParams.ProtoReflect.Descriptor instead.
 func (*ConsensusParams) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{14}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ConsensusParams) GetBlock() *BlockParams {
@@ -1201,7 +1201,7 @@ type BlockParams struct {
 func (x *BlockParams) Reset() {
 	*x = BlockParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[15]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1214,7 +1214,7 @@ func (x *BlockParams) String() string {
 func (*BlockParams) ProtoMessage() {}
 
 func (x *BlockParams) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[15]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1227,7 +1227,7 @@ func (x *BlockParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlockParams.ProtoReflect.Descriptor instead.
 func (*BlockParams) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{15}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *BlockParams) GetMaxBytes() int64 {
@@ -1270,7 +1270,7 @@ type EvidenceParams struct {
 func (x *EvidenceParams) Reset() {
 	*x = EvidenceParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[16]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1283,7 +1283,7 @@ func (x *EvidenceParams) String() string {
 func (*EvidenceParams) ProtoMessage() {}
 
 func (x *EvidenceParams) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[16]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1296,7 +1296,7 @@ func (x *EvidenceParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EvidenceParams.ProtoReflect.Descriptor instead.
 func (*EvidenceParams) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{16}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *EvidenceParams) GetMaxAgeNumBlocks() int64 {
@@ -1333,7 +1333,7 @@ type ValidatorParams struct {
 func (x *ValidatorParams) Reset() {
 	*x = ValidatorParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[17]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1346,7 +1346,7 @@ func (x *ValidatorParams) String() string {
 func (*ValidatorParams) ProtoMessage() {}
 
 func (x *ValidatorParams) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[17]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1359,7 +1359,7 @@ func (x *ValidatorParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidatorParams.ProtoReflect.Descriptor instead.
 func (*ValidatorParams) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{17}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ValidatorParams) GetPubKeyTypes() []string {
@@ -1381,7 +1381,7 @@ type VersionParams struct {
 func (x *VersionParams) Reset() {
 	*x = VersionParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[18]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1394,7 +1394,7 @@ func (x *VersionParams) String() string {
 func (*VersionParams) ProtoMessage() {}
 
 func (x *VersionParams) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[18]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1407,7 +1407,7 @@ func (x *VersionParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VersionParams.ProtoReflect.Descriptor instead.
 func (*VersionParams) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{18}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *VersionParams) GetApp() uint64 {
@@ -1432,7 +1432,7 @@ type HashedParams struct {
 func (x *HashedParams) Reset() {
 	*x = HashedParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[19]
+		mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1445,7 +1445,7 @@ func (x *HashedParams) String() string {
 func (*HashedParams) ProtoMessage() {}
 
 func (x *HashedParams) ProtoReflect() protoreflect.Message {
-	mi := &file_sf_cosmos_type_v1_block_proto_msgTypes[19]
+	mi := &file_sf_cosmos_type_v2_block_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1458,7 +1458,7 @@ func (x *HashedParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HashedParams.ProtoReflect.Descriptor instead.
 func (*HashedParams) Descriptor() ([]byte, []int) {
-	return file_sf_cosmos_type_v1_block_proto_rawDescGZIP(), []int{19}
+	return file_sf_cosmos_type_v2_block_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *HashedParams) GetBlockMaxBytes() int64 {
@@ -1475,11 +1475,11 @@ func (x *HashedParams) GetBlockMaxGas() int64 {
 	return 0
 }
 
-var File_sf_cosmos_type_v1_block_proto protoreflect.FileDescriptor
+var File_sf_cosmos_type_v2_block_proto protoreflect.FileDescriptor
 
-var file_sf_cosmos_type_v1_block_proto_rawDesc = []byte{
+var file_sf_cosmos_type_v2_block_proto_rawDesc = []byte{
 	0x0a, 0x1d, 0x73, 0x66, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x74, 0x79, 0x70, 0x65,
-	0x2f, 0x76, 0x31, 0x2f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
+	0x2f, 0x76, 0x32, 0x2f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
 	0x11, 0x73, 0x66, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x74, 0x79, 0x70, 0x65, 0x2e,
 	0x76, 0x32, 0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x62, 0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72,
@@ -1685,25 +1685,25 @@ var file_sf_cosmos_type_v1_block_proto_rawDesc = []byte{
 	0x6f, 0x6d, 0x2f, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x69, 0x6e, 0x67, 0x66, 0x61, 0x73, 0x74,
 	0x2f, 0x66, 0x69, 0x72, 0x65, 0x68, 0x6f, 0x73, 0x65, 0x2d, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
 	0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x70, 0x62, 0x2f, 0x73, 0x66, 0x2f, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x2f, 0x76, 0x31, 0x3b, 0x70, 0x62, 0x63,
+	0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x2f, 0x76, 0x32, 0x3b, 0x70, 0x62, 0x63,
 	0x6f, 0x6d, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_sf_cosmos_type_v1_block_proto_rawDescOnce sync.Once
-	file_sf_cosmos_type_v1_block_proto_rawDescData = file_sf_cosmos_type_v1_block_proto_rawDesc
+	file_sf_cosmos_type_v2_block_proto_rawDescOnce sync.Once
+	file_sf_cosmos_type_v2_block_proto_rawDescData = file_sf_cosmos_type_v2_block_proto_rawDesc
 )
 
-func file_sf_cosmos_type_v1_block_proto_rawDescGZIP() []byte {
-	file_sf_cosmos_type_v1_block_proto_rawDescOnce.Do(func() {
-		file_sf_cosmos_type_v1_block_proto_rawDescData = protoimpl.X.CompressGZIP(file_sf_cosmos_type_v1_block_proto_rawDescData)
+func file_sf_cosmos_type_v2_block_proto_rawDescGZIP() []byte {
+	file_sf_cosmos_type_v2_block_proto_rawDescOnce.Do(func() {
+		file_sf_cosmos_type_v2_block_proto_rawDescData = protoimpl.X.CompressGZIP(file_sf_cosmos_type_v2_block_proto_rawDescData)
 	})
-	return file_sf_cosmos_type_v1_block_proto_rawDescData
+	return file_sf_cosmos_type_v2_block_proto_rawDescData
 }
 
-var file_sf_cosmos_type_v1_block_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_sf_cosmos_type_v1_block_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
-var file_sf_cosmos_type_v1_block_proto_goTypes = []interface{}{
+var file_sf_cosmos_type_v2_block_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_sf_cosmos_type_v2_block_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_sf_cosmos_type_v2_block_proto_goTypes = []interface{}{
 	(MisbehaviorType)(0),          // 0: sf.cosmos.type.v2.MisbehaviorType
 	(*Block)(nil),                 // 1: sf.cosmos.type.v2.Block
 	(*Header)(nil),                // 2: sf.cosmos.type.v2.Header
@@ -1728,7 +1728,7 @@ var file_sf_cosmos_type_v1_block_proto_goTypes = []interface{}{
 	(*timestamppb.Timestamp)(nil), // 21: google.protobuf.Timestamp
 	(*durationpb.Duration)(nil),   // 22: google.protobuf.Duration
 }
-var file_sf_cosmos_type_v1_block_proto_depIdxs = []int32{
+var file_sf_cosmos_type_v2_block_proto_depIdxs = []int32{
 	21, // 0: sf.cosmos.type.v2.Block.time:type_name -> google.protobuf.Timestamp
 	2,  // 1: sf.cosmos.type.v2.Block.header:type_name -> sf.cosmos.type.v2.Header
 	6,  // 2: sf.cosmos.type.v2.Block.misbehavior:type_name -> sf.cosmos.type.v2.Misbehavior
@@ -1759,13 +1759,13 @@ var file_sf_cosmos_type_v1_block_proto_depIdxs = []int32{
 	0,  // [0:23] is the sub-list for field type_name
 }
 
-func init() { file_sf_cosmos_type_v1_block_proto_init() }
-func file_sf_cosmos_type_v1_block_proto_init() {
-	if File_sf_cosmos_type_v1_block_proto != nil {
+func init() { file_sf_cosmos_type_v2_block_proto_init() }
+func file_sf_cosmos_type_v2_block_proto_init() {
+	if File_sf_cosmos_type_v2_block_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_sf_cosmos_type_v1_block_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Block); i {
 			case 0:
 				return &v.state
@@ -1777,7 +1777,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Header); i {
 			case 0:
 				return &v.state
@@ -1789,7 +1789,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Consensus); i {
 			case 0:
 				return &v.state
@@ -1801,7 +1801,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BlockID); i {
 			case 0:
 				return &v.state
@@ -1813,7 +1813,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PartSetHeader); i {
 			case 0:
 				return &v.state
@@ -1825,7 +1825,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Misbehavior); i {
 			case 0:
 				return &v.state
@@ -1837,7 +1837,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Validator); i {
 			case 0:
 				return &v.state
@@ -1849,7 +1849,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Event); i {
 			case 0:
 				return &v.state
@@ -1861,7 +1861,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*EventAttribute); i {
 			case 0:
 				return &v.state
@@ -1873,7 +1873,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*EventBytes); i {
 			case 0:
 				return &v.state
@@ -1885,7 +1885,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*EventAttributeBytes); i {
 			case 0:
 				return &v.state
@@ -1897,7 +1897,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*TxResults); i {
 			case 0:
 				return &v.state
@@ -1909,7 +1909,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ValidatorUpdate); i {
 			case 0:
 				return &v.state
@@ -1921,7 +1921,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PublicKey); i {
 			case 0:
 				return &v.state
@@ -1933,7 +1933,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ConsensusParams); i {
 			case 0:
 				return &v.state
@@ -1945,7 +1945,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BlockParams); i {
 			case 0:
 				return &v.state
@@ -1957,7 +1957,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*EvidenceParams); i {
 			case 0:
 				return &v.state
@@ -1969,7 +1969,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ValidatorParams); i {
 			case 0:
 				return &v.state
@@ -1981,7 +1981,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*VersionParams); i {
 			case 0:
 				return &v.state
@@ -1993,7 +1993,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 				return nil
 			}
 		}
-		file_sf_cosmos_type_v1_block_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+		file_sf_cosmos_type_v2_block_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*HashedParams); i {
 			case 0:
 				return &v.state
@@ -2006,7 +2006,7 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 			}
 		}
 	}
-	file_sf_cosmos_type_v1_block_proto_msgTypes[13].OneofWrappers = []interface{}{
+	file_sf_cosmos_type_v2_block_proto_msgTypes[13].OneofWrappers = []interface{}{
 		(*PublicKey_Ed25519)(nil),
 		(*PublicKey_Secp256K1)(nil),
 	}
@@ -2014,19 +2014,19 @@ func file_sf_cosmos_type_v1_block_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_sf_cosmos_type_v1_block_proto_rawDesc,
+			RawDescriptor: file_sf_cosmos_type_v2_block_proto_rawDesc,
 			NumEnums:      1,
 			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_sf_cosmos_type_v1_block_proto_goTypes,
-		DependencyIndexes: file_sf_cosmos_type_v1_block_proto_depIdxs,
-		EnumInfos:         file_sf_cosmos_type_v1_block_proto_enumTypes,
-		MessageInfos:      file_sf_cosmos_type_v1_block_proto_msgTypes,
+		GoTypes:           file_sf_cosmos_type_v2_block_proto_goTypes,
+		DependencyIndexes: file_sf_cosmos_type_v2_block_proto_depIdxs,
+		EnumInfos:         file_sf_cosmos_type_v2_block_proto_enumTypes,
+		MessageInfos:      file_sf_cosmos_type_v2_block_proto_msgTypes,
 	}.Build()
-	File_sf_cosmos_type_v1_block_proto = out.File
-	file_sf_cosmos_type_v1_block_proto_rawDesc = nil
-	file_sf_cosmos_type_v1_block_proto_goTypes = nil
-	file_sf_cosmos_type_v1_block_proto_depIdxs = nil
+	File_sf_cosmos_type_v2_block_proto = out.File
+	file_sf_cosmos_type_v2_block_proto_rawDesc = nil
+	file_sf_cosmos_type_v2_block_proto_goTypes = nil
+	file_sf_cosmos_type_v2_block_proto_depIdxs = nil
 }
