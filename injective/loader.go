@@ -6,7 +6,7 @@ import (
 	"github.com/cometbft/cometbft/state"
 	txIndex "github.com/cometbft/cometbft/state/txindex/kv"
 	"github.com/cometbft/cometbft/store"
-	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v1"
+	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v2"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

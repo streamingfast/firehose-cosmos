@@ -4,7 +4,7 @@ package sf.cosmos.type.v2;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
 
-option go_package = "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v1;pbcomos";
+option go_package = "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v2;pbcomos";
 
 // Firehose-centric Block
 message Block {
