@@ -10,7 +10,7 @@ import (
 	abci "github.com/cometbft/cometbft/abci/types"
 	cometType "github.com/cometbft/cometbft/types"
 	cosmoProto "github.com/cosmos/gogoproto/proto"
-	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v1"
+	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v2"
 	"google.golang.org/protobuf/proto"
 )
 
