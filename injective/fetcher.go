@@ -158,7 +158,7 @@ func convertBlockFromResponse(rpcBlock *ctypes.ResultBlock, rpcBlockResults *cty
 	blockHash := rpcBlock.Block.Hash()
 
 	id := hex.EncodeToString(rpcBlock.Block.Hash())
-	parentId := hex.EncodeToString(rpcBlock.Block.Hash())
+	parentId := hex.EncodeToString(rpcBlock.Block.LastBlockID.Hash)
 
 	misbehaviors, err := MisbehaviorsFromEvidences(rpcBlock.Block.Evidence.Evidence)
 	if err != nil {
