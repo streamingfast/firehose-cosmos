@@ -2,6 +2,7 @@ package injective
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
 	"math"
 	"time"
@@ -155,7 +156,10 @@ func convertBlockFromResponse(rpcBlock *ctypes.ResultBlock, rpcBlockResults *cty
 	blockTimestamp := timestamppb.New(rpcBlock.Block.Time)
 	blockHeight := rpcBlock.Block.Height
 	blockHash := rpcBlock.Block.Hash()
-	prevBlockHash := rpcBlock.Block.LastBlockID.Hash.String()
+
+	id := hex.EncodeToString(rpcBlock.Block.Hash())
+	parentId := hex.EncodeToString(rpcBlock.Block.Hash())
+
 	misbehaviors, err := MisbehaviorsFromEvidences(rpcBlock.Block.Evidence.Evidence)
 	if err != nil {
 		return nil, fmt.Errorf("converting misbehaviors: %w", err)
@@ -205,8 +209,8 @@ func convertBlockFromResponse(rpcBlock *ctypes.ResultBlock, rpcBlockResults *cty
 
 	bstreamBlock := &pbbstream.Block{
 		Number:    uint64(blockHeight),
-		Id:        blockHash.String(),
-		ParentId:  prevBlockHash,
+		Id:        id,
+		ParentId:  parentId,
 		Timestamp: blockTimestamp,
 		LibNum:    uint64(blockHeight - 1),
 		ParentNum: uint64(blockHeight - 1),
