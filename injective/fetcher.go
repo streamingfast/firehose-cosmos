@@ -97,7 +97,7 @@ func (f *RPCBlockFetcher) fetchBlock(ctx context.Context, requestBlockNum int64)
 	for _, rpcClient := range f.rpcClients {
 		rpcBlockResponse, err := rpcClient.Block(ctx, &requestBlockNum)
 		if err != nil {
-			f.logger.Warn("failed to fetch block from rpc", zap.Int64("block_num", requestBlockNum), zap.Error(err))
+			f.logger.Warn("failed to fetch block from rpc", zap.Int64("block_num", requestBlockNum), zap.Error(err), zap.String("rpc_client", rpcClient.String()))
 			errs = multierror.Append(errs, err)
 			continue
 		}
@@ -112,7 +112,7 @@ func (f *RPCBlockFetcher) fetchBlockResults(ctx context.Context, requestBlockNum
 	for _, rpcClient := range f.rpcClients {
 		rpcBlockResults, err := rpcClient.BlockResults(ctx, &requestBlockNum)
 		if err != nil {
-			f.logger.Warn("failed to fetch block results from rpc", zap.Int64("block_num", requestBlockNum), zap.Error(err))
+			f.logger.Warn("failed to fetch block results from rpc", zap.Int64("block_num", requestBlockNum), zap.Error(err), zap.String("rpc_client", rpcClient.String()))
 			errs = multierror.Append(errs, err)
 			continue
 		}
