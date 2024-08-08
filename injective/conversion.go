@@ -14,7 +14,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-var unmarshallerDiscardUnknown = &proto.UnmarshalOptions{
+var UnmarshallerDiscardUnknown = &proto.UnmarshalOptions{
 	DiscardUnknown: true,
 }
 
@@ -54,7 +54,7 @@ func protoFlip(origin cosmoProto.Message, target proto.Message) error {
 		return fmt.Errorf("mashalling origin object %T: %w", data, err)
 	}
 
-	err = unmarshallerDiscardUnknown.Unmarshal(data, target)
+	err = UnmarshallerDiscardUnknown.Unmarshal(data, target)
 	if err != nil {
 		if e, ok := origin.(*abci.ResponseDeliverTx); ok {
 			fmt.Println("event data:", hex.EncodeToString(data))
