@@ -14,6 +14,10 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+var unmarshallerDiscardUnknown = &proto.UnmarshalOptions{
+	DiscardUnknown: true,
+}
+
 func arrayToPointerArray[T any](ts []T) []*T {
 	res := make([]*T, len(ts))
 	for i, t := range ts {
@@ -50,7 +54,7 @@ func protoFlip(origin cosmoProto.Message, target proto.Message) error {
 		return fmt.Errorf("mashalling origin object %T: %w", data, err)
 	}
 
-	err = proto.Unmarshal(data, target)
+	err = unmarshallerDiscardUnknown.Unmarshal(data, target)
 	if err != nil {
 		if e, ok := origin.(*abci.ResponseDeliverTx); ok {
 			fmt.Println("event data:", hex.EncodeToString(data))
