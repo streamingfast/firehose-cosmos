@@ -77,7 +77,7 @@ func fixUnknownTypeBlocksRunE(zlog *zap.Logger, tracer logging.Tracer) firecore.
 		}
 
 		var lastFilename string
-		var blockCount int
+		var blockCount = 0
 		err = srcStore.WalkFrom(ctx, "", fmt.Sprintf("%010d", firstStreamableBlock), func(filename string) error {
 			var fileReader io.Reader
 			fileReader, err = srcStore.OpenObject(ctx, filename)
@@ -132,6 +132,10 @@ func fixUnknownTypeBlocksRunE(zlog *zap.Logger, tracer logging.Tracer) firecore.
 				if err != nil {
 					return fmt.Errorf("writing bundle: %w", err)
 				}
+				fmt.Println("done")
+				return nil
+			}
+			if errors.Is(err, io.EOF) {
 				fmt.Println("done")
 				return nil
 			}
