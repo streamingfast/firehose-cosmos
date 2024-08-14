@@ -41,10 +41,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      - name: Run Injective Tests
-        working-directory: ./injective
+      - name: Run Poler tests
+        working-directory: ./poller
         run: go test ./...
 
-      - name: Build Injective
-        working-directory: ./injective
+      - name: Build Poller binaries
+        working-directory: ./poller
         run: go build ./...
