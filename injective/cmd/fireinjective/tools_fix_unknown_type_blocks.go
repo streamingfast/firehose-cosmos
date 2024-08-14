@@ -14,8 +14,8 @@ import (
 	"github.com/streamingfast/cli"
 	"github.com/streamingfast/dstore"
 	firecore "github.com/streamingfast/firehose-core"
+	v03810 "github.com/streamingfast/firehose-cosmos/cometbft/03810"
 	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v2"
-	"github.com/streamingfast/firehose-cosmos/injective"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -24,9 +24,9 @@ import (
 func NewToolsFixUnknownTypeBlocks(logger *zap.Logger, tracer logging.Tracer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "fix-unknown-type-blocks <first-streamable-block> <stop-block> <src-blocks-store> <dst-blocks-store>",
-		Short: "injective firecosmos tool to fix unknown type blocks",
+		Short: "firecosmos tool to fix unknown type blocks",
 		Long: cli.Dedent(`
-			Injective firecosmos tool to fix unknown type blocks. This tool will read blocks from a source
+			Firecosmos tool to fix unknown type blocks. This tool will read blocks from a source
 			and write the fixed block to a destination.
 		`),
 		Args: cobra.ExactArgs(4),
@@ -105,7 +105,7 @@ func fixUnknownTypeBlocksRunE(zlog *zap.Logger, tracer logging.Tracer) firecore.
 				blockCount++
 
 				injectiveBlock := &pbcosmos.Block{}
-				err = injective.UnmarshallerDiscardUnknown.Unmarshal(currentBlock.Payload.Value, injectiveBlock)
+				err = v03810.UnmarshallerDiscardUnknown.Unmarshal(currentBlock.Payload.Value, injectiveBlock)
 				if err != nil {
 					return fmt.Errorf("unmarshaling block: %w", err)
 				}
