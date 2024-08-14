@@ -10,7 +10,7 @@ import (
 	txindexkv "github.com/cometbft/cometbft/state/txindex/kv"
 	"github.com/cometbft/cometbft/store"
 	"github.com/streamingfast/dstore"
-	"github.com/streamingfast/firehose-cosmos/injective"
+	"github.com/streamingfast/firehose-cosmos/poller"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"
 )
@@ -67,8 +67,8 @@ func Main() error {
 	}
 	txIndexStore := txindexkv.NewTxIndex(txIndexDB)
 
-	loader := injective.NewLoader(blockStore, stateStore, txIndexStore, logger)
-	merger := injective.NewSimpleMerger(loader, logger)
+	loader := poller.NewLoader(blockStore, stateStore, txIndexStore, logger)
+	merger := poller.NewSimpleMerger(loader, logger)
 
 	err = merger.GenerateMergeBlock(int64(startBlock), int64(endBlock), destStore)
 	if err != nil {

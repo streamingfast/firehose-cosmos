@@ -1,4 +1,4 @@
-package injective
+package poller
 
 import (
 	"fmt"
@@ -63,7 +63,7 @@ func (l *BlockLoader) loadBlock(height int64) (*pbcosmos.Block, error) {
 	abciEvents := abciResponses.BeginBlock.Events
 	abciEvents = append(abciEvents, abciResponses.EndBlock.Events...)
 	events := make([]*pbcosmos.Event, len(abciEvents))
-	for i, _ := range events {
+	for i := range events {
 		events[i] = &pbcosmos.Event{}
 	}
 	err = arrayProtoFlip(arrayToPointerArray(abciEvents), events)
@@ -86,7 +86,7 @@ func (l *BlockLoader) loadBlock(height int64) (*pbcosmos.Block, error) {
 	}
 
 	validators := make([]*pbcosmos.ValidatorUpdate, len(abciResponses.EndBlock.ValidatorUpdates))
-	for i, _ := range validators {
+	for i := range validators {
 		validators[i] = &pbcosmos.ValidatorUpdate{}
 	}
 	err = arrayProtoFlip(arrayToPointerArray(abciResponses.EndBlock.ValidatorUpdates), validators)

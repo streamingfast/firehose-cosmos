@@ -10,7 +10,7 @@ import (
 	"github.com/streamingfast/cli/sflags"
 	firecore "github.com/streamingfast/firehose-core"
 	"github.com/streamingfast/firehose-core/blockpoller"
-	"github.com/streamingfast/firehose-cosmos/injective"
+	"github.com/streamingfast/firehose-cosmos/poller"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"
 )
@@ -23,7 +23,7 @@ func NewFetchCmd(logger *zap.Logger, tracer logging.Tracer, cosmosChain string) 
 		RunE:  fetchRunE(logger, tracer, cosmosChain),
 	}
 
-	cmd.Flags().StringArray("endpoints", []string{"https://sentry.tm.injective.network:443"}, "interval between fetch")
+	cmd.Flags().StringArray("endpoints", []string{}, "interval between fetch")
 	cmd.Flags().String("state-dir", "/data/poller", "interval between fetch")
 	cmd.Flags().Duration("interval-between-fetch", 0, "interval between fetch")
 	cmd.Flags().Duration("latest-block-retry-interval", time.Second, "interval between fetch")
@@ -69,7 +69,7 @@ func fetchRunE(logger *zap.Logger, tracer logging.Tracer, cosmosChain string) fi
 		var rpcFetcher blockpoller.BlockFetcher
 
 		if cosmosChain == "injective" {
-			rpcFetcher = injective.NewRPCFetcher(rpcClients, fetchInterval, latestBlockRetryInterval, logger)
+			rpcFetcher = poller.NewRPCFetcher(rpcClients, fetchInterval, latestBlockRetryInterval, logger)
 		}
 
 		poller := blockpoller.New(

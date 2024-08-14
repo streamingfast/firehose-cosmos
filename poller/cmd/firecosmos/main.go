@@ -20,6 +20,7 @@ func init() {
 	logging.InstantiateLoggers(logging.WithDefaultLevel(zap.InfoLevel))
 
 	rootCmd.AddCommand(newInjectiveCmd(logger, tracer))
+	rootCmd.AddCommand(newMantraCmd(logger, tracer))
 	rootCmd.AddCommand(NewToolsFixUnknownTypeBlocks(logger, tracer))
 }
 
@@ -36,6 +37,15 @@ func newInjectiveCmd(logger *zap.Logger, tracer logging.Tracer) *cobra.Command {
 		Short: "firecosmos for injective chain",
 	}
 	cmd.AddCommand(newFetchCmd(logger, tracer, "injective"))
+	return cmd
+}
+
+func newMantraCmd(logger *zap.Logger, tracer logging.Tracer) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "mantra",
+		Short: "firecosmos for mantra chain",
+	}
+	cmd.AddCommand(newFetchCmd(logger, tracer, "mantra"))
 	return cmd
 }
 

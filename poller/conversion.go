@@ -1,4 +1,4 @@
-package injective
+package poller
 
 import (
 	"encoding/hex"
@@ -69,7 +69,7 @@ func protoFlip(origin cosmoProto.Message, target proto.Message) error {
 
 func convertResponseDeliverTx(tx *abci.ResponseDeliverTx) (*pbcosmos.TxResults, error) {
 	events := make([]*pbcosmos.Event, len(tx.Events))
-	for i, _ := range events {
+	for i := range events {
 		events[i] = &pbcosmos.Event{}
 	}
 	err := arrayProtoFlip(arrayToPointerArray(tx.Events), events)
@@ -108,7 +108,7 @@ func MisbehaviorsFromEvidences(evidences cometType.EvidenceList) ([]*pbcosmos.Mi
 		abciMisbehavior := e.ABCI()
 
 		partials := make([]*pbcosmos.Misbehavior, len(abciMisbehavior))
-		for i, _ := range partials {
+		for i := range partials {
 			partials[i] = &pbcosmos.Misbehavior{}
 		}
 

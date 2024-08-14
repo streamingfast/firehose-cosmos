@@ -1,4 +1,4 @@
-package injective
+package poller
 
 import (
 	"context"
@@ -33,9 +33,6 @@ func (m *SimpleMerge) GenerateMergeBlock(startBlock int64, endBlock int64, destS
 	if startBlock < first {
 		return fmt.Errorf("start block %d is before the first block %d of current snapshot", startBlock, first)
 	}
-	//if startBlock%100 != 0 {
-	//	return fmt.Errorf("start block %d is not a boundary", startBlock)
-	//}
 
 	if endBlock > last {
 		return fmt.Errorf("end block %d is after the last block %d of current snapshot", endBlock, last)
