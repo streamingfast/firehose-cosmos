@@ -13,7 +13,7 @@ import (
 var logger, tracer = logging.PackageLogger("firecosmos", "github.com/streamingfast/firehose-cosmos")
 var rootCmd = &cobra.Command{
 	Use:   "fireinjective",
-	Short: "Fireinjective block fetching and tooling",
+	Short: "Firehose poller for Injective block fetching and tooling",
 	Args:  cobra.ExactArgs(1),
 }
 

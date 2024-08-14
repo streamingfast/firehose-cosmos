@@ -13,7 +13,7 @@ import (
 var logger, tracer = logging.PackageLogger("firecosmos", "github.com/streamingfast/firehose-cosmos")
 var rootCmd = &cobra.Command{
 	Use:   "firemantra",
-	Short: "Firemantra block fetching and tooling",
+	Short: "Firehose poller for Mantra block fetching and tooling",
 	Args:  cobra.ExactArgs(1),
 }
 
