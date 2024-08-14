@@ -1,4 +1,4 @@
-module github.com/streamingfast/firehose-cosmos/cometbft/v03810
+module github.com/streamingfast/firehose-cosmos/cometbft/03810
 
 go 1.22.2
 
