@@ -1,21 +1,23 @@
-package main
+package cmd
 
 import (
 	"fmt"
 	"strconv"
 	"time"
 
+	"github.com/streamingfast/firehose-cosmos/poller/block"
+
 	cometBftHttp "github.com/cometbft/cometbft/rpc/client/http"
 	"github.com/spf13/cobra"
 	"github.com/streamingfast/cli/sflags"
 	firecore "github.com/streamingfast/firehose-core"
 	"github.com/streamingfast/firehose-core/blockpoller"
-	"github.com/streamingfast/firehose-cosmos/poller"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"
 )
 
-func NewFetchCmd(logger *zap.Logger, tracer logging.Tracer, cosmosChain string) *cobra.Command {
+func NewFetchRPCCmd(logger *zap.Logger, tracer logging.Tracer, cosmosChain string) *cobra.Command {
+
 	cmd := &cobra.Command{
 		Use:   "rpc <first-streamable-block>",
 		Short: "fetch blocks from rpc endpoint",
@@ -69,7 +71,7 @@ func fetchRunE(logger *zap.Logger, tracer logging.Tracer, cosmosChain string) fi
 		var rpcFetcher blockpoller.BlockFetcher
 
 		if cosmosChain == "injective" {
-			rpcFetcher = poller.NewRPCFetcher(rpcClients, fetchInterval, latestBlockRetryInterval, logger)
+			rpcFetcher = block.NewRPCFetcher(rpcClients, fetchInterval, latestBlockRetryInterval, logger)
 		}
 
 		poller := blockpoller.New(

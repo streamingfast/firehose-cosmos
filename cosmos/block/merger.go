@@ -1,4 +1,4 @@
-package poller
+package block
 
 import (
 	"context"
@@ -15,10 +15,10 @@ import (
 
 type SimpleMerge struct {
 	logger      *zap.Logger
-	blockLoader *BlockLoader
+	blockLoader *block.BlockLoader
 }
 
-func NewSimpleMerger(blockLoader *BlockLoader, logger *zap.Logger) *SimpleMerge {
+func NewSimpleMerger(blockLoader *block.BlockLoader, logger *zap.Logger) *SimpleMerge {
 	return &SimpleMerge{
 		blockLoader: blockLoader,
 		logger:      logger,

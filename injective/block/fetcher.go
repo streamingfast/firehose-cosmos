@@ -1,11 +1,14 @@
-package poller
+package block
 
 import (
 	"context"
 	"encoding/hex"
 	"fmt"
 	"math"
+	"strings"
 	"time"
+
+	"github.com/streamingfast/firehose-cosmos/cosmos/utils"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/proto/tendermint/types"
@@ -73,6 +76,7 @@ func (f *RPCBlockFetcher) Fetch(ctx context.Context, requestBlockNum uint64) (b 
 		f.logger.Info("got latest block num", zap.Uint64("latest_block_num", f.latestBlockNum), zap.Uint64("requested_block_num", requestBlockNum))
 
 		if f.latestBlockNum >= requestBlockNum {
+
 			break
 		}
 		sleepDuration = f.latestBlockRetryInterval
@@ -185,8 +189,8 @@ func convertBlockFromResponse(rpcBlock *ctypes.ResultBlock, rpcBlockResults *cty
 		return nil, fmt.Errorf("converting consensus param updates: %w", err)
 	}
 
-	finalEvents := rpcBlockResults.BeginBlockEvents
-	finalEvents = append(finalEvents, rpcBlockResults.EndBlockEvents...)
+	finalEvents := rpcBlockResults.FinalizeBlockEvents
+	//finalEvents = append(finalEvents, rpcBlockResults.EndBlockEvents...)
 	events, err := convertEventsFromResponse(finalEvents)
 	if err != nil {
 		return nil, fmt.Errorf("converting events: %w", err)
@@ -229,7 +233,7 @@ func convertEventsFromResponse(responseEvents []abci.Event) ([]*pbcosmos.Event, 
 		events[i] = &pbcosmos.Event{}
 	}
 
-	err := arrayProtoFlip(arrayToPointerArray(responseEvents), events)
+	err := utils.ArrayProtoFlip(utils.ArrayToPointerArray(responseEvents), events)
 	if err != nil {
 		return nil, fmt.Errorf("converting events: %w", err)
 	}
@@ -243,7 +247,7 @@ func convertTxsFromResponse(transactions cometType.Txs) (txs [][]byte) {
 func convertHeaderFromResponse(responseHeader *cometType.Header) (*pbcosmos.Header, error) {
 	header := &pbcosmos.Header{}
 
-	err := protoFlip(responseHeader.ToProto(), header)
+	err := utils.ProtoFlip(responseHeader.ToProto(), header)
 	if err != nil {
 		return nil, fmt.Errorf("converting block meta header: %w", err)
 	}
@@ -257,7 +261,7 @@ func convertValidatorUpdatesFromResponse(validatorUpdates []abci.ValidatorUpdate
 		validators[i] = &pbcosmos.ValidatorUpdate{}
 	}
 
-	err := arrayProtoFlip(arrayToPointerArray(validatorUpdates), validators)
+	err := utils.ArrayProtoFlip(utils.ArrayToPointerArray(validatorUpdates), validators)
 	if err != nil {
 		return nil, fmt.Errorf("converting validators: %w", err)
 	}
@@ -266,9 +270,64 @@ func convertValidatorUpdatesFromResponse(validatorUpdates []abci.ValidatorUpdate
 
 func convertConsensusParamUpdatesFromResponse(consensusParamUpdates *types.ConsensusParams) (*pbcosmos.ConsensusParams, error) {
 	out := &pbcosmos.ConsensusParams{}
-	err := protoFlip(consensusParamUpdates, out)
+	err := utils.ProtoFlip(consensusParamUpdates, out)
 	if err != nil {
 		return nil, fmt.Errorf("converting consensus param updates: %w", err)
 	}
 	return out, nil
+}
+
+func convertResponseDeliverTx(tx *abci.ResponseDeliverTx) (*pbcosmos.TxResults, error) {
+	events := make([]*pbcosmos.Event, len(tx.Events))
+	for i := range events {
+		events[i] = &pbcosmos.Event{}
+	}
+	err := utils.ArrayProtoFlip(arrayToPointerArray(tx.Events), events)
+	if err != nil {
+		return nil, fmt.Errorf("converting events: %w", err)
+	}
+
+	fixedLog := strings.Map(utils.FixUtf, tx.Log)
+
+	txResults := &pbcosmos.TxResults{
+		Code:      tx.Code,
+		Data:      tx.Data,
+		Log:       fixedLog,
+		Info:      tx.Info,
+		GasWanted: tx.GasWanted,
+		GasUsed:   tx.GasUsed,
+		Events:    events,
+		Codespace: tx.Codespace,
+	}
+
+	return txResults, nil
+}
+
+func convertDeliverTxs(txs []*abci.ResponseDeliverTx) ([]*pbcosmos.TxResults, error) {
+	txResults := make([]*pbcosmos.TxResults, len(txs))
+	for i, tx := range txs {
+		txResults[i], _ = convertResponseDeliverTx(tx)
+	}
+	return txResults, nil
+}
+
+func MisbehaviorsFromEvidences(evidences cometType.EvidenceList) ([]*pbcosmos.Misbehavior, error) {
+	var misbehaviors []*pbcosmos.Misbehavior
+	for _, e := range evidences {
+
+		abciMisbehavior := e.ABCI()
+
+		partials := make([]*pbcosmos.Misbehavior, len(abciMisbehavior))
+		for i := range partials {
+			partials[i] = &pbcosmos.Misbehavior{}
+		}
+
+		err := utils.ArrayProtoFlip(utils.ArrayToPointerArray(abciMisbehavior), partials)
+		if err != nil {
+			return nil, fmt.Errorf("converting abci misbehavior: %w", err)
+		}
+
+		misbehaviors = append(misbehaviors, partials...)
+	}
+	return misbehaviors, nil
 }

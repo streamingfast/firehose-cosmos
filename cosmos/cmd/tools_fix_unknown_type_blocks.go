@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"errors"
@@ -14,8 +14,8 @@ import (
 	"github.com/streamingfast/cli"
 	"github.com/streamingfast/dstore"
 	firecore "github.com/streamingfast/firehose-core"
+	"github.com/streamingfast/firehose-cosmos/cosmos/block"
 	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v2"
-	"github.com/streamingfast/firehose-cosmos/poller"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -105,7 +105,7 @@ func fixUnknownTypeBlocksRunE(zlog *zap.Logger, tracer logging.Tracer) firecore.
 				blockCount++
 
 				injectiveBlock := &pbcosmos.Block{}
-				err = poller.UnmarshallerDiscardUnknown.Unmarshal(currentBlock.Payload.Value, injectiveBlock)
+				err = block.UnmarshallerDiscardUnknown.Unmarshal(currentBlock.Payload.Value, injectiveBlock)
 				if err != nil {
 					return fmt.Errorf("unmarshaling block: %w", err)
 				}

@@ -1,7 +1,9 @@
-package poller
+package block
 
 import (
 	"fmt"
+
+	block2 "github.com/streamingfast/firehose-cosmos/poller/block"
 
 	"github.com/cometbft/cometbft/state"
 	txIndex "github.com/cometbft/cometbft/state/txindex/kv"
@@ -80,7 +82,7 @@ func (l *BlockLoader) loadBlock(height int64) (*pbcosmos.Block, error) {
 	//	return nil, fmt.Errorf("converting tx results: %w", err)
 	//}
 
-	trxResults, err := convertDeliverTxs(abciResponses.DeliverTxs)
+	trxResults, err := block2.convertDeliverTxs(abciResponses.DeliverTxs)
 	if err != nil {
 		return nil, fmt.Errorf("converting tx results: %w", err)
 	}
@@ -94,7 +96,7 @@ func (l *BlockLoader) loadBlock(height int64) (*pbcosmos.Block, error) {
 		return nil, fmt.Errorf("converting validators: %w", err)
 	}
 
-	misbehaviors, err := MisbehaviorsFromEvidences(block.Evidence.Evidence)
+	misbehaviors, err := block2.MisbehaviorsFromEvidences(block.Evidence.Evidence)
 	if err != nil {
 		return nil, fmt.Errorf("converting misbehaviors from evidences: %w", err)
 	}
