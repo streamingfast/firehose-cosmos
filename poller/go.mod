@@ -1,10 +1,9 @@
-module github.com/streamingfast/firehose-cosmos/injective
+module github.com/streamingfast/firehose-cosmos/poller
 
 go 1.22.2
 
 replace (
 	github.com/bufbuild/protocompile => github.com/bufbuild/protocompile v0.4.0
-	github.com/cometbft/cometbft => github.com/InjectiveLabs/cometbft v0.38.10-inj-1
 	github.com/streamingfast/firehose-cosmos/cometbft/03810 => ../cometbft/03810
 	github.com/streamingfast/firehose-cosmos/cosmos => ../cosmos
 )
