@@ -42,6 +42,7 @@ func (f *RPCBlockFetcher) IsBlockAvailable(requestedSlot uint64) bool {
 	return true
 }
 
+// todo: move this to chain specific package
 func (f *RPCBlockFetcher) fetchLatestBlockNum(ctx context.Context) (uint64, error) {
 	var errs error
 	for _, rpcClient := range f.rpcClients {
@@ -92,6 +93,7 @@ func (f *RPCBlockFetcher) Fetch(ctx context.Context, requestBlockNum uint64) (b 
 	return bstreamBlock, false, nil
 }
 
+// todo: move this to chain specific package
 func (f *RPCBlockFetcher) fetchBlock(ctx context.Context, requestBlockNum int64) (*ctypes.ResultBlock, error) {
 	var errs error
 	for _, rpcClient := range f.rpcClients {
@@ -107,6 +109,7 @@ func (f *RPCBlockFetcher) fetchBlock(ctx context.Context, requestBlockNum int64)
 	return nil, errs
 }
 
+// todo: move this to chain specific package
 func (f *RPCBlockFetcher) fetchBlockResults(ctx context.Context, requestBlockNum int64) (*ctypes.ResultBlockResults, error) {
 	var errs error
 	for _, rpcClient := range f.rpcClients {
