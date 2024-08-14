@@ -12,11 +12,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 
 RUN rm /etc/localtime && ln -snf /usr/share/zoneinfo/America/Montreal /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
-
 ADD /fireinjective /app/fireinjective
+ADD /firemantra /app/firemantra
 
 ENV PATH "$PATH:/app"
 
 COPY --from=core /app/firecore /app/firecore
 
-ENTRYPOINT ["/app/fireinjective"]
+ENTRYPOINT [""]
