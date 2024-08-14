@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/streamingfast/firehose-cosmos/cosmos/utils"
-
+1
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/proto/tendermint/types"
 	cometBftHttp "github.com/cometbft/cometbft/rpc/client/http"
