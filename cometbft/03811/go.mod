@@ -9,7 +9,7 @@ replace (
 )
 
 require (
-	github.com/cometbft/cometbft v0.0.0-00010101000000-000000000000
+	github.com/cometbft/cometbft v0.38.11
 	github.com/cosmos/gogoproto v1.4.12
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/streamingfast/bstream v0.0.2-0.20240619142813-9d23840859bf
