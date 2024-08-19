@@ -7,7 +7,7 @@ firecore start reader-node merger \
     --common-auto-mem-limit-percent=90  \
     --common-one-block-store-url=data/oneblock  \
     --common-merged-blocks-store-url=data/merged \
-    --common-first-streamable-block=82019824 \
+    --common-first-streamable-block=0 \
     --reader-node-data-dir=data/oneblock  \
     --reader-node-working-dir=data/work  \
     --reader-node-readiness-max-latency=600s  \
@@ -16,4 +16,4 @@ firecore start reader-node merger \
     --reader-node-grpc-listen-addr=:9001  \
     --reader-node-manager-api-addr=:8080  \
     --reader-node-path=fireinjective  \
-    --reader-node-arguments="fetch rpc 82019824 --state-dir data --block-fetch-batch-size=1 --endpoints $INJECTIVE_ENDPOINT"
+    --reader-node-arguments="fetch rpc 0 --state-dir data --block-fetch-batch-size=1 --endpoints $INJECTIVE_ENDPOINT"
