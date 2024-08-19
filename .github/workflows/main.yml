@@ -48,3 +48,11 @@ jobs:
       - name: Build Poller binaries
         working-directory: ./fireinjective
         run: go build .
+
+      - name: Run Poler tests
+        working-directory: ./firemantra
+        run: go test ./...
+
+      - name: Build Poller binaries
+        working-directory: ./firemantra
+        run: go build .
