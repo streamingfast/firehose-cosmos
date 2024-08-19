@@ -12,7 +12,6 @@ import (
 	// "github.com/cosmos/gogoproto/proto"
 	"github.com/spf13/cobra"
 	"github.com/streamingfast/bstream"
-	"github.com/streamingfast/cli"
 	"github.com/streamingfast/dstore"
 	firecore "github.com/streamingfast/firehose-core"
 	"github.com/streamingfast/logging"
@@ -21,12 +20,7 @@ import (
 
 func NewToolsFixBlockHashes(logger *zap.Logger, tracer logging.Tracer) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "fix-unknown-type-blocks <first-streamable-block> <stop-block> <src-blocks-store> <dst-blocks-store>",
-		Short: "firecosmos tool to fix unknown type blocks",
-		Long: cli.Dedent(`
-			Firecosmos tool to fix unknown type blocks. This tool will read blocks from a source
-			and write the fixed block to a destination.
-		`),
+		Use:  "fix-block-hashes <first-streamable-block> <stop-block> <src-blocks-store> <dst-blocks-store>",
 		Args: cobra.ExactArgs(4),
 		RunE: fixBlockHashesRunE(logger, tracer),
 	}

@@ -22,6 +22,7 @@ func init() {
 
 	rootCmd.AddCommand(newFetchCmd(logger, tracer))
 	rootCmd.AddCommand(NewToolsFixUnknownTypeBlocks(logger, tracer))
+	rootCmd.AddCommand(NewToolsFixBlockHashes(logger, tracer))
 }
 
 func main() {
