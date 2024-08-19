@@ -1,5 +1,5 @@
 *.lz4
 /.idea
-/injective/.idea/
-/injective/devel/.env
-/injective/devel/data
+/fireinjective/.idea/
+/fireinjective/devel/.env
+/fireinjective/devel/data

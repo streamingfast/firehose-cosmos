@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	v03810 "github.com/streamingfast/firehose-cosmos/cometbft/03810"
+	v03811 "github.com/streamingfast/firehose-cosmos/cometbft/03811"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"
 )
@@ -13,7 +13,7 @@ import (
 var logger, tracer = logging.PackageLogger("firecosmos", "github.com/streamingfast/firehose-cosmos")
 var rootCmd = &cobra.Command{
 	Use:   "fireinjective",
-	Short: "Firehose poller for Injective block fetching and tooling",
+	Short: "Firehose fetcher for Injective block fetching and tooling",
 	Args:  cobra.ExactArgs(1),
 }
 
@@ -37,6 +37,6 @@ func newFetchCmd(logger *zap.Logger, tracer logging.Tracer) *cobra.Command {
 		Short: "fetch blocks from different sources",
 		Args:  cobra.ExactArgs(2),
 	}
-	cmd.AddCommand(v03810.NewFetchCmd(logger, tracer))
+	cmd.AddCommand(v03811.NewFetchCmd(logger, tracer))
 	return cmd
 }

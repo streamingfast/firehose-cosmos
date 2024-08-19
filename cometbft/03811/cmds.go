@@ -1,4 +1,4 @@
-package v03810
+package v03811
 
 import (
 	"fmt"
@@ -23,7 +23,7 @@ func NewFetchCmd(logger *zap.Logger, tracer logging.Tracer) *cobra.Command {
 	}
 
 	cmd.Flags().StringArray("endpoints", []string{"https://sentry.tm.injective.network:443"}, "interval between fetch")
-	cmd.Flags().String("state-dir", "/data/poller", "interval between fetch")
+	cmd.Flags().String("state-dir", "/data/fetcher", "interval between fetch")
 	cmd.Flags().Duration("interval-between-fetch", 0, "interval between fetch")
 	cmd.Flags().Duration("latest-block-retry-interval", time.Second, "interval between fetch")
 	cmd.Flags().Int("block-fetch-batch-size", 10, "Number of blocks to fetch in a single batch")
@@ -46,7 +46,7 @@ func fetchRunE(logger *zap.Logger, tracer logging.Tracer) firecore.CommandExecut
 		fetchInterval := sflags.MustGetDuration(cmd, "interval-between-fetch")
 
 		logger.Info(
-			"launching firehose-cosmos poller",
+			"launching firehose-cosmos fetcher",
 			zap.Strings("rpc_endpoint", rpcEndpoints),
 			zap.String("state_dir", stateDir),
 			zap.Uint64("first_streamable_block", startBlock),
@@ -77,7 +77,7 @@ func fetchRunE(logger *zap.Logger, tracer logging.Tracer) firecore.CommandExecut
 
 		err = poller.Run(ctx, startBlock, sflags.MustGetInt(cmd, "block-fetch-batch-size"))
 		if err != nil {
-			return fmt.Errorf("running poller: %w", err)
+			return fmt.Errorf("running fetcher: %w", err)
 		}
 
 		return nil

@@ -14,7 +14,7 @@ import (
 	"github.com/streamingfast/cli"
 	"github.com/streamingfast/dstore"
 	firecore "github.com/streamingfast/firehose-core"
-	v03810 "github.com/streamingfast/firehose-cosmos/cometbft/03810"
+	v03810 "github.com/streamingfast/firehose-cosmos/cometbft/03811"
 	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v2"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"

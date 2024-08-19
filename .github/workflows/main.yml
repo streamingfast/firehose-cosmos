@@ -42,9 +42,9 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: Run Poler tests
-        working-directory: ./poller
+        working-directory: ./fetcher
         run: go test ./...
 
       - name: Build Poller binaries
-        working-directory: ./poller
+        working-directory: ./fetcher
         run: go build ./...
