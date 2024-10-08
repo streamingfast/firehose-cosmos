@@ -3,3 +3,11 @@
 /fireinjective/.idea/
 /fireinjective/devel/.env
 /fireinjective/devel/data
+/cometbft/03811/.idea/.gitignore
+/cometbft/03811/.idea/03811.iml
+/cometbft/03811/.idea/modules.xml
+/cometbft/03811/.idea/vcs.xml
+/firemantra/.idea/.gitignore
+/firemantra/.idea/firemantra.iml
+/firemantra/.idea/modules.xml
+/firemantra/.idea/vcs.xml
