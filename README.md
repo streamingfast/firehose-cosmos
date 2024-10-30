@@ -6,7 +6,7 @@
 
 [![reference](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://pkg.go.dev/github.com/streamingfast/firehose-vara)
 
-Quick start with Firehose for Vara can be found in the official Firehose docs. Here some quick links to it:
+Quick start with Firehose for Cosmos can be found in the official Firehose docs. Here some quick links to it:
 
 - [Firehose Overview](https://firehose.streamingfast.io/introduction/firehose-overview)
 - [Concepts & Architectures](https://firehose.streamingfast.io/concepts-and-architeceture)
