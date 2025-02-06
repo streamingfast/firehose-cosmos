@@ -50,24 +50,24 @@ func fetchRunE(logger *zap.Logger, _ logging.Tracer) firecore.CommandExecutor {
 			zap.Duration("latest_block_retry_interval", sflags.MustGetDuration(cmd, "latest-block-retry-interval")),
 		)
 
-		rpcClients := firecoreRPC.NewClients[*cometBftHttp.HTTP](10*time.Second, firecoreRPC.NewStickyRollingStrategy[*cometBftHttp.HTTP](), logger)
+		wrappedCometHttpClients := firecoreRPC.NewClients[*CometHttpClientWrap](10*time.Second, firecoreRPC.NewStickyRollingStrategy[*CometHttpClientWrap](), logger)
 		for _, rpcEndpoint := range rpcEndpoints {
 			client, err := cometBftHttp.New(rpcEndpoint, "")
 			if err != nil {
 				return fmt.Errorf("creating rpc client: %w", err)
 			}
-			rpcClients.Add(client)
+			wrappedCometHttpClients.Add(NewCometHttpClientWrap(rpcEndpoint, client))
 		}
 
 		latestBlockRetryInterval := sflags.MustGetDuration(cmd, "latest-block-retry-interval")
 
 		rpcFetcher := NewRPCFetcher(latestBlockRetryInterval, logger)
-		poller := blockpoller.New[*cometBftHttp.HTTP](
+		poller := blockpoller.New[*CometHttpClientWrap](
 			rpcFetcher,
 			blockpoller.NewFireBlockHandler("type.googleapis.com/sf.cosmos.type.v2.Block"),
-			rpcClients,
-			blockpoller.WithStoringState[*cometBftHttp.HTTP](stateDir),
-			blockpoller.WithLogger[*cometBftHttp.HTTP](logger),
+			wrappedCometHttpClients,
+			blockpoller.WithStoringState[*CometHttpClientWrap](stateDir),
+			blockpoller.WithLogger[*CometHttpClientWrap](logger),
 		)
 
 		err = poller.Run(startBlock, nil, sflags.MustGetInt(cmd, "block-fetch-batch-size"))
