@@ -7,6 +7,7 @@ import (
 
 	cometBftHttp "github.com/cometbft/cometbft/rpc/client/http"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/streamingfast/cli/sflags"
 	firecore "github.com/streamingfast/firehose-core"
 	"github.com/streamingfast/firehose-core/blockpoller"
@@ -27,6 +28,7 @@ func NewFetchCmd(logger *zap.Logger, tracer logging.Tracer) *cobra.Command {
 	cmd.Flags().String("state-dir", "/data/fetcher", "interval between fetch")
 	cmd.Flags().Duration("latest-block-retry-interval", time.Second, "interval between fetch")
 	cmd.Flags().Int("block-fetch-batch-size", 10, "Number of blocks to fetch in a single batch")
+	cmd.Flags().Duration("max-block-fetch-duration", 3*time.Second, "maximum delay before considering a block fetch as failed")
 
 	return cmd
 }
@@ -42,15 +44,14 @@ func fetchRunE(logger *zap.Logger, _ logging.Tracer) firecore.CommandExecutor {
 			return fmt.Errorf("unable to parse first streamable block %d: %w", startBlock, err)
 		}
 
-		logger.Info(
-			"launching firehose-cosmos fetcher",
-			zap.Strings("rpc_endpoint", rpcEndpoints),
-			zap.String("state_dir", stateDir),
-			zap.Uint64("first_streamable_block", startBlock),
-			zap.Duration("latest_block_retry_interval", sflags.MustGetDuration(cmd, "latest-block-retry-interval")),
-		)
+		// Log all command flags and their values using the logger
+		logger.Info("Command Flags and Values:")
+		cmd.Flags().VisitAll(func(flag *pflag.Flag) {
+			logger.Info("Flag", zap.String("name", flag.Name), zap.String("value", flag.Value.String()))
+		})
 
-		wrappedCometHttpClients := firecoreRPC.NewClients[*CometHttpClientWrap](10*time.Second, firecoreRPC.NewStickyRollingStrategy[*CometHttpClientWrap](), logger)
+		blockFetchMaxDuration := sflags.MustGetDuration(cmd, "max-block-fetch-duration")
+		wrappedCometHttpClients := firecoreRPC.NewClients[*CometHttpClientWrap](blockFetchMaxDuration, firecoreRPC.NewStickyRollingStrategy[*CometHttpClientWrap](), logger)
 		for _, rpcEndpoint := range rpcEndpoints {
 			client, err := cometBftHttp.New(rpcEndpoint, "")
 			if err != nil {
