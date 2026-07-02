@@ -28,7 +28,7 @@ func NewFetchCmd(logger *zap.Logger, tracer logging.Tracer) *cobra.Command {
 	cmd.Flags().String("state-dir", "/data/fetcher", "interval between fetch")
 	cmd.Flags().Duration("latest-block-retry-interval", time.Second, "interval between fetch")
 	cmd.Flags().Int("block-fetch-batch-size", 10, "Number of blocks to fetch in a single batch")
-	cmd.Flags().Duration("max-block-fetch-duration", 3*time.Second, "maximum delay before considering a block fetch as failed")
+	cmd.Flags().Duration("max-block-fetch-duration", 60*time.Second, "maximum delay before considering a block fetch as failed")
 
 	return cmd
 }
