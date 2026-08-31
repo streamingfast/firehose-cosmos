@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	v03811 "github.com/streamingfast/firehose-cosmos/cometbft/03811"
+	cometbftv1 "github.com/streamingfast/firehose-cosmos/cometbft/101"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"
 )
@@ -38,6 +38,6 @@ func newFetchCmd(logger *zap.Logger, tracer logging.Tracer) *cobra.Command {
 		Short: "fetch blocks from different sources",
 		Args:  cobra.ExactArgs(2),
 	}
-	cmd.AddCommand(v03811.NewFetchCmd(logger, tracer))
+	cmd.AddCommand(cometbftv1.NewFetchCmd(logger, tracer))
 	return cmd
 }
