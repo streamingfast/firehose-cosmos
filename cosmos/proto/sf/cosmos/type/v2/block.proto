@@ -3,6 +3,7 @@ package sf.cosmos.type.v2;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
 
 option go_package = "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v2;pbcomos";
 
@@ -148,6 +149,7 @@ message PublicKey {
   oneof sum {
     bytes ed25519 = 1;
     bytes secp256k1 = 2;
+    bytes bls12381 = 3;
   }
 }
 
@@ -156,6 +158,28 @@ message ConsensusParams {
   EvidenceParams evidence = 2;
   ValidatorParams validator = 3;
   VersionParams version = 4;
+  // Deprecated in CometBFT v1; vote extensions height moved to FeatureParams.
+  // Kept so proto-flip of v0.38 and v1 updates still captures field 5.
+  ABCIParams abci = 5;
+  SynchronyParams synchrony = 6;
+  FeatureParams feature = 7;
+}
+
+// ABCIParams is deprecated in CometBFT v1 (use FeatureParams).
+message ABCIParams {
+  int64 vote_extensions_enable_height = 1;
+}
+
+// SynchronyParams are the Proposer-Based Timestamp bounds (CometBFT v1).
+message SynchronyParams {
+  google.protobuf.Duration precision = 1;
+  google.protobuf.Duration message_delay = 2;
+}
+
+// FeatureParams are the heights at which CometBFT features enable (v1).
+message FeatureParams {
+  google.protobuf.Int64Value vote_extensions_enable_height = 1;
+  google.protobuf.Int64Value pbts_enable_height = 2;
 }
 
 // BlockParams contains limits on the block size.
