@@ -11,7 +11,7 @@ replace github.com/cometbft/cometbft/api => github.com/streamingfast/cometbft/ap
 replace github.com/streamingfast/firehose-cosmos/cometbft/101/convert => ./convert
 
 require (
-	buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260831141550-f648f31fdb5e.1
+	buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260901132337-3c05174eb2a8.1
 	github.com/cometbft/cometbft v1.0.1
 	github.com/cometbft/cometbft/api v1.0.0
 	github.com/spf13/cobra v1.9.1

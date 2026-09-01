@@ -2,8 +2,8 @@ buf.build/gen/go/bufbuild/reflect/connectrpc/go v1.16.1-20240117202343-bf8f65e88
 buf.build/gen/go/bufbuild/reflect/connectrpc/go v1.16.1-20240117202343-bf8f65e8876c.1/go.mod h1:8aC0AUYVzAH5wP6/43Z89/0un0nvZyf+PVSeeaHyYyg=
 buf.build/gen/go/bufbuild/reflect/protocolbuffers/go v1.33.0-20240117202343-bf8f65e8876c.1 h1:9ROfgUJtdplIn+2PvUB+Z7HMRVBIsU0uCPAcPfes98I=
 buf.build/gen/go/bufbuild/reflect/protocolbuffers/go v1.33.0-20240117202343-bf8f65e8876c.1/go.mod h1:TF9ggHlVzYnMjBa4v+ghV6daBmQ0AU4KaAMezoCmX9c=
-buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260831141550-f648f31fdb5e.1 h1:AMMo52/OLItP3BPHV2kja8qObRhjAn6Z1zRnJlmu6dQ=
-buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260831141550-f648f31fdb5e.1/go.mod h1:1saQ1teSEVnhspdAeuuxUtglVBAbvxOW/xoke251SSk=
+buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260901132337-3c05174eb2a8.1 h1:GrUXcyqUvbPLGGtoo+1oH5nhYm7gryRa5NHQnw50gv8=
+buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260901132337-3c05174eb2a8.1/go.mod h1:1saQ1teSEVnhspdAeuuxUtglVBAbvxOW/xoke251SSk=
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.38.0/go.mod h1:990N+gfupTy94rShfmMCWGDn0LpTmnzTp2qbd1dvSRU=
