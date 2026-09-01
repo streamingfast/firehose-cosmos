@@ -11,6 +11,7 @@ import (
 	ctypes "github.com/cometbft/cometbft/rpc/core/types"
 	cometType "github.com/cometbft/cometbft/types"
 	pbbstream "github.com/streamingfast/bstream/pb/sf/bstream/v1"
+	"github.com/streamingfast/firehose-cosmos/cometbft/101/convert"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -144,7 +145,7 @@ func convertBlockFromResponse(rpcBlock *ctypes.ResultBlock, rpcBlockResults *cty
 		AppHash:               rpcBlockResults.AppHash,
 	}
 
-	cosmosBlock, err := ConvertBlock(block.ChainID, block.Version.App, req, res)
+	cosmosBlock, err := convert.ConvertBlock(block.ChainID, block.Version.App, req, res)
 	if err != nil {
 		return nil, fmt.Errorf("converting finalize block: %w", err)
 	}

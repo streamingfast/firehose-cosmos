@@ -8,16 +8,18 @@ replace github.com/cometbft/cometbft => github.com/streamingfast/cometbft v1.0.1
 
 replace github.com/cometbft/cometbft/api => github.com/streamingfast/cometbft/api v1.0.1-inj.v1.19.0-rollback-firehose
 
+replace github.com/streamingfast/firehose-cosmos/cometbft/101/convert => ./convert
+
 require (
 	buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260831141550-f648f31fdb5e.1
 	github.com/cometbft/cometbft v1.0.1
 	github.com/cometbft/cometbft/api v1.0.0
-	github.com/cosmos/gogoproto v1.7.2
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
 	github.com/streamingfast/bstream v0.0.2-0.20250114192704-6a23c67c0b4d
 	github.com/streamingfast/cli v0.0.4-0.20250116003948-fbf66c930cce
 	github.com/streamingfast/firehose-core v1.7.3
+	github.com/streamingfast/firehose-cosmos/cometbft/101/convert v0.0.0
 	github.com/streamingfast/logging v0.0.0-20230608130331-f22c91403091
 	github.com/stretchr/testify v1.12.1
 	go.uber.org/zap v1.26.0
@@ -70,6 +72,7 @@ require (
 	github.com/cometbft/cometbft-db v1.0.4 // indirect
 	github.com/containerd/cgroups v1.0.4 // indirect
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
+	github.com/cosmos/gogoproto v1.7.2 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/dgraph-io/badger/v4 v4.6.0 // indirect
 	github.com/dgraph-io/ristretto/v2 v2.1.0 // indirect

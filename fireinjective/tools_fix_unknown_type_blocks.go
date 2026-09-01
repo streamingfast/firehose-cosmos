@@ -14,7 +14,7 @@ import (
 	"github.com/streamingfast/cli"
 	"github.com/streamingfast/dstore"
 	firecore "github.com/streamingfast/firehose-core"
-	cometbftv1 "github.com/streamingfast/firehose-cosmos/cometbft/101"
+	"github.com/streamingfast/firehose-cosmos/cometbft/101/convert"
 	pbcosmos "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v2"
 	"github.com/streamingfast/logging"
 	"go.uber.org/zap"
@@ -105,7 +105,7 @@ func fixUnknownTypeBlocksRunE(zlog *zap.Logger, tracer logging.Tracer) firecore.
 				blockCount++
 
 				injectiveBlock := &pbcosmos.Block{}
-				err = cometbftv1.UnmarshallerDiscardUnknown.Unmarshal(currentBlock.Payload.Value, injectiveBlock)
+				err = convert.UnmarshallerDiscardUnknown.Unmarshal(currentBlock.Payload.Value, injectiveBlock)
 				if err != nil {
 					return fmt.Errorf("unmarshaling block: %w", err)
 				}

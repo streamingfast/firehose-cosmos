@@ -4,6 +4,8 @@ go 1.26.2
 
 replace github.com/streamingfast/firehose-cosmos/cometbft/101 => ../cometbft/101
 
+replace github.com/streamingfast/firehose-cosmos/cometbft/101/convert => ../cometbft/101/convert
+
 replace github.com/streamingfast/firehose-cosmos/cosmos => ../cosmos
 
 replace github.com/cometbft/cometbft => github.com/streamingfast/cometbft v1.0.1-inj.v1.19.0-rollback-firehose
@@ -17,6 +19,7 @@ require (
 	github.com/streamingfast/dstore v0.1.1-0.20241011152904-9acd6205dc14
 	github.com/streamingfast/firehose-core v1.7.3
 	github.com/streamingfast/firehose-cosmos/cometbft/101 v0.0.0-00010101000000-000000000000
+	github.com/streamingfast/firehose-cosmos/cometbft/101/convert v0.0.0
 	github.com/streamingfast/firehose-cosmos/cosmos v0.0.0-20240819131142-da0abb6e124c
 	github.com/streamingfast/logging v0.0.0-20230608130331-f22c91403091
 	go.uber.org/zap v1.26.0
