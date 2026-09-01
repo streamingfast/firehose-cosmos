@@ -9,7 +9,7 @@ replace github.com/cometbft/cometbft => github.com/streamingfast/cometbft v1.0.1
 replace github.com/cometbft/cometbft/api => github.com/streamingfast/cometbft/api v1.0.1-inj.v1.19.0-rollback-firehose
 
 require (
-	buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260831141550-f648f31fdb5e.1
+	buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260901132337-3c05174eb2a8.1
 	github.com/cometbft/cometbft v1.0.1
 	github.com/cometbft/cometbft/api v1.0.0
 	github.com/cosmos/gogoproto v1.7.2

@@ -3,7 +3,6 @@ package sf.cosmos.type.v2;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
-import "google/protobuf/wrappers.proto";
 
 option go_package = "github.com/streamingfast/firehose-cosmos/cosmos/pb/sf/cosmos/type/v2;pbcomos";
 
@@ -178,8 +177,8 @@ message SynchronyParams {
 
 // FeatureParams are the heights at which CometBFT features enable (v1).
 message FeatureParams {
-  google.protobuf.Int64Value vote_extensions_enable_height = 1;
-  google.protobuf.Int64Value pbts_enable_height = 2;
+  Int64Value vote_extensions_enable_height = 1;
+  Int64Value pbts_enable_height = 2;
 }
 
 // BlockParams contains limits on the block size.
@@ -229,4 +228,10 @@ message VersionParams { uint64 app = 1; }
 message HashedParams {
   int64 block_max_bytes = 1;
   int64 block_max_gas = 2;
+}
+
+// Int64Value is a nullable int64. Same wire layout as google.protobuf.Int64Value
+// (field 1 = int64) so CometBFT FeatureParams can be proto-flipped.
+message Int64Value {
+  int64 value = 1;
 }

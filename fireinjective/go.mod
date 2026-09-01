@@ -26,7 +26,7 @@ require (
 require (
 	buf.build/gen/go/bufbuild/reflect/connectrpc/go v1.16.1-20240117202343-bf8f65e8876c.1 // indirect
 	buf.build/gen/go/bufbuild/reflect/protocolbuffers/go v1.33.0-20240117202343-bf8f65e8876c.1 // indirect
-	buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260831141550-f648f31fdb5e.1 // indirect
+	buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260901132337-3c05174eb2a8.1 // indirect
 	cloud.google.com/go v0.115.0 // indirect
 	cloud.google.com/go/auth v0.6.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.2 // indirect
