@@ -2,7 +2,7 @@ module github.com/streamingfast/firehose-cosmos/fireinjective
 
 go 1.26.2
 
-replace github.com/streamingfast/firehose-cosmos/cometbft/101 => ../cometbft/v1
+replace github.com/streamingfast/firehose-cosmos/cometbft/101 => ../cometbft/101
 
 replace github.com/streamingfast/firehose-cosmos/cosmos => ../cosmos
 
