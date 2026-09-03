@@ -168,10 +168,13 @@ func TestConvertEventsDropsIndexFlag(t *testing.T) {
 	require.Len(t, events, 1)
 	require.Equal(t, "amount", events[0].Attributes[0].Key)
 
-	marshalled, err := proto.Marshal(events[0])
-	require.NoError(t, err)
-	require.NotContains(t, string(marshalled), "\x08\x01")
-	_ = marshalled
+	require.True(t, proto.Equal(events[0], &pbcosmos.Event{
+		Type: "transfer",
+		Attributes: []*pbcosmos.EventAttribute{{
+			Key:   "amount",
+			Value: "1inj",
+		}},
+	}), "the index flag has no field on the firehose event")
 }
 
 func TestConvertPublicKeyAcceptsBLS(t *testing.T) {
@@ -202,5 +205,20 @@ func TestConvertEventsSanitizesInvalidUTF8(t *testing.T) {
 	require.Equal(t, "ok�nope", events[0].Attributes[0].Value)
 
 	_, err = proto.Marshal(events[0])
+	require.NoError(t, err)
+}
+
+func TestConvertTxResultSanitizesEveryString(t *testing.T) {
+	invalid := "codespace\xff"
+	got, err := convertTxResult(&abci.ExecTxResult{
+		Log:       invalid,
+		Info:      invalid,
+		Codespace: invalid,
+	})
+	require.NoError(t, err)
+
+	// A block carrying invalid UTF-8 fails to marshal, and the poller cannot get
+	// past that height.
+	_, err = proto.Marshal(got)
 	require.NoError(t, err)
 }

@@ -9,9 +9,9 @@ replace github.com/streamingfast/firehose-cosmos/cosmos => ../../cosmos
 require (
 	github.com/cometbft/cometbft v0.38.11
 	github.com/cosmos/gogoproto v1.4.12
+	github.com/spf13/pflag v1.0.5
 	github.com/streamingfast/bstream v0.0.2-0.20250114192704-6a23c67c0b4d
 	github.com/streamingfast/cli v0.0.4-0.20250116003948-fbf66c930cce
-	github.com/streamingfast/derr v0.0.0-20230515163924-8570aaa43fe1
 	github.com/streamingfast/dstore v0.1.1-0.20241011152904-9acd6205dc14
 	github.com/streamingfast/firehose-core v1.7.3
 	github.com/streamingfast/firehose-cosmos/cosmos v0.0.0-00010101000000-000000000000
@@ -77,9 +77,9 @@ require (
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.18.1 // indirect
 	github.com/streamingfast/dauth v0.0.0-20240222213226-519afc16cf84 // indirect
+	github.com/streamingfast/derr v0.0.0-20230515163924-8570aaa43fe1 // indirect
 	github.com/streamingfast/dhammer v0.0.0-20230125192823-c34bbd561bd4 // indirect
 	github.com/streamingfast/dmetering v0.0.0-20241101155221-489f5a9d9139 // indirect
 	github.com/streamingfast/dtracing v0.0.0-20220305214756-b5c0e8699839 // indirect
@@ -180,7 +180,7 @@ require (
 	github.com/streamingfast/opaque v0.0.0-20210811180740-0c01d37ea308 // indirect
 	github.com/streamingfast/pbgo v0.0.6-0.20250114182320-0b43084f4000 // indirect
 	github.com/streamingfast/shutter v1.5.0 // indirect
-	github.com/stretchr/testify v1.9.0 // indirect
+	github.com/stretchr/testify v1.9.0
 	github.com/syndtr/goleveldb v1.0.1-0.20220721030215-126854af5e6d // indirect
 	github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf // indirect
 	go.etcd.io/bbolt v1.4.0-alpha.0.0.20240404170359-43604f3112c5 // indirect

@@ -61,7 +61,7 @@ func convertHeader(chainID string, versionApp uint64, req abci.FinalizeBlockRequ
 			Block: version.BlockProtocol,
 			App:   versionApp,
 		},
-		ChainId: chainID,
+		ChainId: sanitizeUTF8(chainID),
 		Height:  req.Height,
 		Time:    timestamppb.New(req.Time.UTC()),
 		LastBlockId: &pbcosmos.BlockID{
@@ -149,7 +149,7 @@ func convertTxResult(tx *abci.ExecTxResult) (*pbcosmos.TxResults, error) {
 		GasWanted: tx.GasWanted,
 		GasUsed:   tx.GasUsed,
 		Events:    events,
-		Codespace: tx.Codespace,
+		Codespace: sanitizeUTF8(tx.Codespace),
 	}, nil
 }
 

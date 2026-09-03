@@ -1,5 +1,5 @@
-buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260831141550-f648f31fdb5e.1 h1:AMMo52/OLItP3BPHV2kja8qObRhjAn6Z1zRnJlmu6dQ=
-buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260831141550-f648f31fdb5e.1/go.mod h1:1saQ1teSEVnhspdAeuuxUtglVBAbvxOW/xoke251SSk=
+buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260901132337-3c05174eb2a8.1 h1:GrUXcyqUvbPLGGtoo+1oH5nhYm7gryRa5NHQnw50gv8=
+buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260901132337-3c05174eb2a8.1/go.mod h1:1saQ1teSEVnhspdAeuuxUtglVBAbvxOW/xoke251SSk=
 github.com/btcsuite/btcd/btcutil v1.1.6 h1:zFL2+c3Lb9gEgqKNzowKUPQNb8jV7v5Oaodi/AYFd6c=
 github.com/btcsuite/btcd/btcutil v1.1.6/go.mod h1:9dFymx8HpuLqBnsPELrImQeTQfKBQqzqGbbV3jK55aE=
 github.com/cosmos/gogoproto v1.7.2 h1:5G25McIraOC0mRFv9TVO139Uh3OklV2hczr13KKVHCA=
