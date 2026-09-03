@@ -1,22 +1,27 @@
-module github.com/streamingfast/firehose-cosmos/fireinjective
+module github.com/streamingfast/firehose-cosmos/cometbft/101
 
 go 1.26.2
 
-replace github.com/streamingfast/firehose-cosmos/cometbft/101 => ../cometbft/101
-
-replace github.com/streamingfast/firehose-cosmos/cometbft/101/convert => ../cometbft/101/convert
-
+// FinalizeBlockRequest header hashes (LastBlockHash, AppHash, …) exist only on
+// the firehose-patched fork. Stock v1.0.1 does not carry them.
 replace github.com/cometbft/cometbft => github.com/streamingfast/cometbft v1.0.1-inj.v1.19.0-rollback-firehose
 
 replace github.com/cometbft/cometbft/api => github.com/streamingfast/cometbft/api v1.0.1-inj.v1.19.0-rollback-firehose
 
+replace github.com/streamingfast/firehose-cosmos/cometbft/101/convert => ./convert
+
 require (
+	buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260901132337-3c05174eb2a8.1
+	github.com/cometbft/cometbft v1.0.1
+	github.com/cometbft/cometbft/api v1.0.0
 	github.com/spf13/cobra v1.9.1
+	github.com/spf13/pflag v1.0.6
 	github.com/streamingfast/bstream v0.0.2-0.20250114192704-6a23c67c0b4d
-	github.com/streamingfast/dstore v0.1.1-0.20241011152904-9acd6205dc14
+	github.com/streamingfast/cli v0.0.4-0.20250116003948-fbf66c930cce
 	github.com/streamingfast/firehose-core v1.7.3
-	github.com/streamingfast/firehose-cosmos/cometbft/101 v0.0.0-00010101000000-000000000000
+	github.com/streamingfast/firehose-cosmos/cometbft/101/convert v0.0.0
 	github.com/streamingfast/logging v0.0.0-20230608130331-f22c91403091
+	github.com/stretchr/testify v1.12.1
 	go.uber.org/zap v1.26.0
 	google.golang.org/protobuf v1.36.12
 )
@@ -24,7 +29,6 @@ require (
 require (
 	buf.build/gen/go/bufbuild/reflect/connectrpc/go v1.16.1-20240117202343-bf8f65e8876c.1 // indirect
 	buf.build/gen/go/bufbuild/reflect/protocolbuffers/go v1.33.0-20240117202343-bf8f65e8876c.1 // indirect
-	buf.build/gen/go/streamingfast/firehose-cosmos/protocolbuffers/go v1.36.12-20260901132337-3c05174eb2a8.1 // indirect
 	cloud.google.com/go v0.115.0 // indirect
 	cloud.google.com/go/auth v0.6.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.2 // indirect
@@ -65,9 +69,7 @@ require (
 	github.com/cockroachdb/pebble v1.1.4 // indirect
 	github.com/cockroachdb/redact v1.1.5 // indirect
 	github.com/cockroachdb/tokenbucket v0.0.0-20230807174530-cc333fc44b06 // indirect
-	github.com/cometbft/cometbft v1.0.1 // indirect
 	github.com/cometbft/cometbft-db v1.0.4 // indirect
-	github.com/cometbft/cometbft/api v1.0.0 // indirect
 	github.com/containerd/cgroups v1.0.4 // indirect
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
 	github.com/cosmos/gogoproto v1.7.2 // indirect
@@ -151,10 +153,8 @@ require (
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
-	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/spf13/viper v1.19.0 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
-	github.com/streamingfast/cli v0.0.4-0.20250116003948-fbf66c930cce // indirect
 	github.com/streamingfast/dauth v0.0.0-20240222213226-519afc16cf84 // indirect
 	github.com/streamingfast/dbin v0.9.1-0.20231117225723-59790c798e2c // indirect
 	github.com/streamingfast/derr v0.0.0-20230515163924-8570aaa43fe1 // indirect
@@ -162,17 +162,16 @@ require (
 	github.com/streamingfast/dhammer v0.0.0-20230125192823-c34bbd561bd4 // indirect
 	github.com/streamingfast/dmetering v0.0.0-20241101155221-489f5a9d9139 // indirect
 	github.com/streamingfast/dmetrics v0.0.0-20230919161904-206fa8ebd545 // indirect
+	github.com/streamingfast/dstore v0.1.1-0.20241011152904-9acd6205dc14 // indirect
 	github.com/streamingfast/dtracing v0.0.0-20220305214756-b5c0e8699839 // indirect
-	github.com/streamingfast/firehose-cosmos/cometbft/101/convert v0.0.0 // indirect
 	github.com/streamingfast/opaque v0.0.0-20210811180740-0c01d37ea308 // indirect
 	github.com/streamingfast/pbgo v0.0.6-0.20250114182320-0b43084f4000 // indirect
 	github.com/streamingfast/sf-tracing v0.0.0-20240430173521-888827872b90 // indirect
 	github.com/streamingfast/shutter v1.5.0 // indirect
 	github.com/streamingfast/substreams v1.12.2 // indirect
-	github.com/stretchr/testify v1.12.1 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/supranational/blst v0.3.14 // indirect
-	github.com/syndtr/goleveldb v1.0.1-0.20220721030215-126854af5e6d // indirect
+	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7 // indirect
 	github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf // indirect
 	github.com/yourbasic/graph v0.0.0-20210606180040-8ecfec1c2869 // indirect
 	github.com/zeebo/errs v1.4.0 // indirect
