@@ -21,7 +21,6 @@ func init() {
 	logging.InstantiateLoggers(logging.WithDefaultLevel(zap.InfoLevel))
 
 	rootCmd.AddCommand(newFetchCmd(logger, tracer))
-	rootCmd.AddCommand(NewToolsFixUnknownTypeBlocks(logger, tracer))
 	rootCmd.AddCommand(NewToolsFixBlockHashes(logger, tracer))
 }
 
