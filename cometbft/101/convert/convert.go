@@ -25,6 +25,7 @@ func ConvertBlock(chainID string, versionApp uint64, req abci.FinalizeBlockReque
 	if err != nil {
 		return nil, fmt.Errorf("converting events: %w", err)
 	}
+	events = placeBlockBloomBeforeEventSetBalances(events)
 
 	txResults, err := convertTxResults(res.TxResults)
 	if err != nil {
@@ -196,6 +197,71 @@ func convertConsensusParams(src *cmtproto.ConsensusParams) (*pbcosmos.ConsensusP
 		return nil, err
 	}
 	return out, nil
+}
+
+func eventMode(e *pbcosmos.Event) string {
+	if e == nil {
+		return ""
+	}
+	for _, a := range e.Attributes {
+		if a.GetKey() == "mode" {
+			return a.GetValue()
+		}
+	}
+	return ""
+}
+
+func isBlockBloomEndBlock(e *pbcosmos.Event) bool {
+	return e != nil && e.Type == "block_bloom" && eventMode(e) == "EndBlock"
+}
+
+func isEventSetBalances(e *pbcosmos.Event) bool {
+	return e != nil && e.Type == "cosmos.bank.v1beta1.EventSetBalances"
+}
+
+// placeBlockBloomBeforeEventSetBalances matches production firehose-cosmos
+// event order: EndBlock block_bloom sits immediately before EventSetBalances
+// (after exchange matching events when those are present).
+func placeBlockBloomBeforeEventSetBalances(events []*pbcosmos.Event) []*pbcosmos.Event {
+	if len(events) == 0 {
+		return events
+	}
+	var blooms []*pbcosmos.Event
+	rest := make([]*pbcosmos.Event, 0, len(events))
+	for _, e := range events {
+		if isBlockBloomEndBlock(e) {
+			blooms = append(blooms, e)
+			continue
+		}
+		rest = append(rest, e)
+	}
+	if len(blooms) == 0 {
+		return events
+	}
+
+	insertAt := -1
+	firstEndBlock := -1
+	for i, e := range rest {
+		if eventMode(e) == "EndBlock" && firstEndBlock < 0 {
+			firstEndBlock = i
+		}
+		if isEventSetBalances(e) && eventMode(e) == "EndBlock" {
+			insertAt = i
+		}
+	}
+	if insertAt < 0 {
+		if firstEndBlock >= 0 {
+			insertAt = firstEndBlock
+		} else {
+			insertAt = len(rest)
+		}
+	}
+
+	out := make([]*pbcosmos.Event, 0, len(events))
+	out = append(out, rest[:insertAt]...)
+	out = append(out, blooms...)
+	out = append(out, rest[insertAt:]...)
+	return out
 }
 
 func sanitizeUTF8(s string) string {

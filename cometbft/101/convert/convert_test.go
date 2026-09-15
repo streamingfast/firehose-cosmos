@@ -155,6 +155,66 @@ func durationPtr(d time.Duration) *time.Duration {
 	return &d
 }
 
+func TestPlaceBlockBloomBeforeEventSetBalancesAfterOrderbook(t *testing.T) {
+	begin := &pbcosmos.Event{Type: "txfees", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "mode", Value: "BeginBlock"},
+	}}
+	spent := &pbcosmos.Event{Type: "coin_spent", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "mode", Value: "EndBlock"},
+	}}
+	bookV2 := &pbcosmos.Event{Type: "injective.exchange.v2.EventOrderbookUpdate", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "mode", Value: "EndBlock"},
+	}}
+	bookV1 := &pbcosmos.Event{Type: "injective.exchange.v1beta1.EventOrderbookUpdate", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "mode", Value: "EndBlock"},
+	}}
+	bloom := &pbcosmos.Event{Type: "block_bloom", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "bloom"},
+		{Key: "mode", Value: "EndBlock"},
+	}}
+	balances := &pbcosmos.Event{Type: "cosmos.bank.v1beta1.EventSetBalances", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "mode", Value: "EndBlock"},
+	}}
+
+	got := placeBlockBloomBeforeEventSetBalances([]*pbcosmos.Event{begin, bloom, spent, bookV2, bookV1, balances})
+	require.Equal(t, []*pbcosmos.Event{begin, spent, bookV2, bookV1, bloom, balances}, got)
+}
+
+func TestPlaceBlockBloomBeforeEventSetBalancesAfterPositions(t *testing.T) {
+	begin := &pbcosmos.Event{Type: "txfees", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "mode", Value: "BeginBlock"},
+	}}
+	bloom := &pbcosmos.Event{Type: "block_bloom", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "bloom"},
+		{Key: "mode", Value: "EndBlock"},
+	}}
+	position := &pbcosmos.Event{Type: "injective.exchange.v1beta1.EventBatchDerivativePosition", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "mode", Value: "EndBlock"},
+	}}
+	balances := &pbcosmos.Event{Type: "cosmos.bank.v1beta1.EventSetBalances", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "mode", Value: "EndBlock"},
+	}}
+
+	got := placeBlockBloomBeforeEventSetBalances([]*pbcosmos.Event{begin, bloom, position, balances})
+	require.Equal(t, []*pbcosmos.Event{begin, position, bloom, balances}, got)
+}
+
+func TestPlaceBlockBloomWithoutMatchingEventsStaysBeforeBalances(t *testing.T) {
+	begin := &pbcosmos.Event{Type: "txfees", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "mode", Value: "BeginBlock"},
+	}}
+	bloom := &pbcosmos.Event{Type: "block_bloom", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "bloom"},
+		{Key: "mode", Value: "EndBlock"},
+	}}
+	balances := &pbcosmos.Event{Type: "cosmos.bank.v1beta1.EventSetBalances", Attributes: []*pbcosmos.EventAttribute{
+		{Key: "mode", Value: "EndBlock"},
+	}}
+
+	got := placeBlockBloomBeforeEventSetBalances([]*pbcosmos.Event{begin, bloom, balances})
+	require.Equal(t, []*pbcosmos.Event{begin, bloom, balances}, got)
+}
+
 func TestConvertEventsDropsIndexFlag(t *testing.T) {
 	events, err := convertEvents([]abci.Event{{
 		Type: "transfer",
